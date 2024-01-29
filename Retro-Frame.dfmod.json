@@ -1,6 +1,6 @@
 {
     "ModTitle": "Retro-Frame",
-    "ModVersion": "1.0.0",
+    "ModVersion": "1.0.1",
     "ModAuthor": "DunnyOfPenwick",
     "ContactInfo": "http://dfworkshop.net - or - DunnyOfPenwick@proton.me",
     "DFUnity_Version": "1.0.0",
@@ -18,7 +18,6 @@
         "Assets/Game/Mods/Retro-Frame/Textures/Frame.png",
         "Assets/Game/Mods/Retro-Frame/modsettings.json",
         "Assets/Game/Mods/Retro-Frame/Scripts/ModSave.cs",
-        "Assets/Game/Mods/Retro-Frame/Textures/ActiveIconCutout.png",
         "Assets/Game/Mods/Retro-Frame/Textures/HotkeyIconCutout.png",
         "Assets/Game/Mods/Retro-Frame/Scripts/HotkeyPopupWindow.cs",
         "Assets/Game/Mods/Retro-Frame/Textures/CrosshairIcon.png",
@@ -31,6 +30,9 @@
         "Assets/Game/Mods/Retro-Frame/Text/textdatabase.txt",
         "Assets/Game/Mods/Retro-Frame/Text/[fr]textdatabase.txt",
         "Assets/Game/Mods/Retro-Frame/Text/[pt]textdatabase.txt",
-        "Assets/Game/Mods/Retro-Frame/Text/[ru]textdatabase.txt"
+        "Assets/Game/Mods/Retro-Frame/Text/[ru]textdatabase.txt",
+        "Assets/Game/Mods/Retro-Frame/Textures/IconCutout.png",
+        "Assets/Game/Mods/Retro-Frame/Textures/BottomBorder.png",
+        "Assets/Game/Mods/Retro-Frame/Textures/TopBorder.png"
     ]
 }

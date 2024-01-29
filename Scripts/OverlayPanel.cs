@@ -35,6 +35,9 @@ namespace RetroFrame
         private static OverlayPanel instance;
 
         readonly Panel mainPanel = new Panel();
+        readonly Panel viewPanel = new Panel();
+        readonly Panel topBorderPanel = new Panel();
+        readonly Panel bottomBorderPanel = new Panel();
         readonly Panel toolTipContainerPanel = new Panel();
         readonly Panel leftPanel = new Panel();
         readonly Panel leftPanelPauseGameOverlay = new Panel();
@@ -150,20 +153,21 @@ namespace RetroFrame
 
             LoadAssets();
 
-            Tag = "overlayPanel";
+            Tag = "OverlayPanel";
 
             defaultTextScale = DaggerfallUnity.Settings.SDFFontRendering ? 4f : 3.5f;
 
             //********************Main Panel********************************************************
             Components.Add(mainPanel);
-            mainPanel.Tag = "mainPanel";
+            mainPanel.Tag = "MainPanel";
             mainPanel.Size = new Vector2(1280, 800);
             mainPanel.AutoSize = AutoSizeModes.ScaleFreely;
 
             //toolTipContainerPanel exists to give defaultToolTip proper scaling.
+            //It provides different scaling than the main panel.
             Components.Add(toolTipContainerPanel);
-            toolTipContainerPanel.Tag = "tooltipContainerPanel";
-            toolTipContainerPanel.Size = new Vector2(384, 216); //reasonable sized tooltips
+            toolTipContainerPanel.Tag = "TooltipContainerPanel";
+            toolTipContainerPanel.Size = new Vector2(384, 216); //reasonable sized/scaled tooltips
             toolTipContainerPanel.AutoSize = AutoSizeModes.ScaleFreely;
 
             defaultToolTip.ToolTipDelay = DaggerfallUnity.Settings.ToolTipDelayInSeconds;
@@ -176,14 +180,14 @@ namespace RetroFrame
 
             //********************Left Panel*********************************************************
             mainPanel.Components.Add(leftPanel);
-            leftPanel.Tag = "leftPanel";
+            leftPanel.Tag = "LeftPanel";
             leftPanel.Position = new Vector2(5.2f, 8);
             leftPanel.Size = new Vector2(148, 784);
 
 
             //=======Character/Head Panel=========
             leftPanel.Components.Add(characterPanel);
-            characterPanel.Tag = "characterPanel";
+            characterPanel.Tag = "CharacterPanel";
             characterPanel.VerticalAlignment = VerticalAlignment.Top;
             characterPanel.Size = new Vector2(leftPanel.InteriorWidth, 168);
             characterPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrame");
@@ -192,6 +196,7 @@ namespace RetroFrame
             characterPanel.OnRightMouseClick += CharacterPanel_OnMouseClick;
             //---head
             characterPanel.Components.Add(headPanel);
+            characterPanel.Tag = "HeadPanel";
             headPanel.HorizontalAlignment = HorizontalAlignment.Center;
             headPanel.Position = new Vector2(16, 18);
             headPanel.Size = new Vector2(leftPanel.Size.x - 30, leftPanel.Size.x - 32);
@@ -204,6 +209,7 @@ namespace RetroFrame
             headTintPanel.Size = headShadePanel.Size;
             //---name
             characterPanel.Components.Add(nameLabel);
+            nameLabel.Tag = "NameLabel";
             nameLabel.Position = new Vector2(0, characterPanel.Size.y - 30);
             nameLabel.MaxWidth = characterPanel.InteriorWidth - 16;
             nameLabel.TextScale = defaultTextScale; //**TextScale is likely changed during Update() for longer names
@@ -215,7 +221,7 @@ namespace RetroFrame
 
             //======Inventory Button=========
             leftPanel.Components.Add(inventoryButton);
-            inventoryButton.Tag = "inventoryButton";
+            inventoryButton.Tag = "InventoryButtonPanel";
             inventoryButton.Position = new Vector2(0, characterPanel.Size.y);
             inventoryButton.Size = new Vector2(leftPanel.InteriorWidth, 100);
             inventoryButton.BackgroundTexture = inventoryTexture;
@@ -225,7 +231,7 @@ namespace RetroFrame
 
             //======Interaction Mode Button========
             leftPanel.Components.Add(interactionModeButton);
-            interactionModeButton.Tag = "interactionModeButton";
+            interactionModeButton.Tag = "InteractionModeButtonPanel";
             interactionModeButton.Position = new Vector2(0, inventoryButton.Position.y + inventoryButton.Size.y);
             interactionModeButton.Size = new Vector2(leftPanel.InteriorWidth, 100);
             interactionModeButton.ToolTip = defaultToolTip;
@@ -234,7 +240,7 @@ namespace RetroFrame
 
             //======Vitals Panel=============
             leftPanel.Components.Add(vitalsPanel);
-            vitalsPanel.Tag = "vitalsPanel";
+            vitalsPanel.Tag = "VitalsPanel";
             vitalsPanel.VerticalAlignment = VerticalAlignment.Bottom;
             vitalsPanel.HorizontalAlignment = HorizontalAlignment.Center;
             vitalsPanel.Size = new Vector2(leftPanel.InteriorWidth, 160);
@@ -243,6 +249,7 @@ namespace RetroFrame
             //---vitals value bars
             HUDVitals vitals = new HUDVitals();
             vitalsPanel.Components.Add(vitals);
+            vitals.Tag = "HUDVitalsBars";
             vitals.HorizontalAlignment = HorizontalAlignment.None;
             vitals.VerticalAlignment = VerticalAlignment.None;
             vitals.AutoSize = AutoSizeModes.None;
@@ -260,7 +267,7 @@ namespace RetroFrame
 
             //======Active Effects Panel===============
             leftPanel.Components.Add(activeEffectsPanel);
-            activeEffectsPanel.Tag = "activeEffectsPanel";
+            activeEffectsPanel.Tag = "ActiveEffectsPanel";
             activeEffectsPanel.Position = new Vector2(0, interactionModeButton.Position.y + interactionModeButton.Size.y);
             float vSize = leftPanel.Size.y - vitalsPanel.Size.y;
             vSize -= interactionModeButton.Position.y + interactionModeButton.Size.y;
@@ -273,13 +280,14 @@ namespace RetroFrame
             {
                 Panel rowPanel = new Panel();
                 activeEffectsPanel.Components.Add(rowPanel);
-                rowPanel.Tag = "activeEffectsRowPanel" + row;
+                rowPanel.Tag = "ActiveEffectsRowPanel" + row;
                 rowPanel.Position = new Vector2(0, (row * rowHeight) + (row * rowSpacing));
                 rowPanel.Size = new Vector2(activeEffectsPanel.InteriorWidth, rowHeight);
                 rowPanel.LeftMargin = rowPanel.RightMargin = 4;
 
                 TextLabel label = new TextLabel();
                 rowPanel.Components.Add(label);
+                label.Tag = "DescriptionLabel" + row;
                 effectLabels[row] = label;
                 label.VerticalAlignment = VerticalAlignment.Middle;
                 label.HorizontalAlignment = HorizontalAlignment.Left;
@@ -294,6 +302,7 @@ namespace RetroFrame
                     //Icons added right-to-left
                     Panel icon = new Panel();
                     rowPanel.Components.Add(icon);
+                    icon.Tag = "Icon" + col;
                     int iconWidth = rowPanel.InteriorHeight;
                     float x = rowPanel.InteriorWidth - ((col + 1) * iconWidth) - (col * colSpacing);
                     icon.Position = new Vector2(x, 0);
@@ -304,7 +313,7 @@ namespace RetroFrame
                     Panel iconCutout = new Panel(); //--a cutout panel placed over icon to make the icon look circular
                     icon.Components.Add(iconCutout);
                     iconCutout.AutoSize = AutoSizeModes.ResizeToFill;
-                    iconCutout.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("ActiveIconCutout");
+                    iconCutout.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("IconCutout");
                     iconCutout.BackgroundTextureLayout = BackgroundLayout.StretchToFill;
                     effectIcons[row, col] = icon;
                 }
@@ -312,7 +321,7 @@ namespace RetroFrame
 
             //====Instantaneous Spell Icon and Label==========
             mainPanel.Components.Add(instantaneousSpellIconContainer);
-            instantaneousSpellIconContainer.Tag = "instSpellIconContainer";
+            instantaneousSpellIconContainer.Tag = "InstSpellIconContainer";
             instantaneousSpellIconContainer.Enabled = false;
             instantaneousSpellIconContainer.Position = new Vector2(leftPanel.Size.x + 10, mainPanel.Size.y - 110);
             instantaneousSpellIconContainer.Size = new Vector2(50, 50);
@@ -325,7 +334,7 @@ namespace RetroFrame
             instantaneousSpellIcon.AutoSize = AutoSizeModes.ResizeToFill;
 
             mainPanel.Components.Add(instantaneousSpellLabel);
-            instantaneousSpellLabel.Tag = "instSpellLabel";
+            instantaneousSpellLabel.Tag = "InstSpellLabel";
             instantaneousSpellLabel.Enabled = false;
             instantaneousSpellLabel.Position = new Vector2(leftPanel.Size.x + 60, mainPanel.Size.y - 97);
             instantaneousSpellLabel.TextScale = defaultTextScale;
@@ -333,13 +342,13 @@ namespace RetroFrame
 
             //====Left Panel Pause Game Overlay, darkens left panel when game is paused
             leftPanel.Components.Add(leftPanelPauseGameOverlay);
+            leftPanelPauseGameOverlay.Tag = "LeftPanelPauseGameOverlay";
             leftPanelPauseGameOverlay.Size = leftPanel.Size;
             leftPanelPauseGameOverlay.BackgroundColor = new Color(0, 0, 0, 0.5f);
 
-
             //***********************Right Panel*********************************************************
             mainPanel.Components.Add(rightPanel);
-            rightPanel.Tag = "rightPanel";
+            rightPanel.Tag = "RightPanel";
             rightPanel.Position = new Vector2(1126, 8);
             rightPanel.Size = leftPanel.Size;
             rightPanel.OnMouseLeave += RightPanel_OnMouseLeave;
@@ -347,14 +356,14 @@ namespace RetroFrame
 
             //=======Actions Panel=========
             rightPanel.Components.Add(actionsPanel);
-            actionsPanel.Tag = "actionsPanel";
+            actionsPanel.Tag = "ActionsPanel";
             actionsPanel.Enabled = ActionsPanelLocked;
             actionsPanel.Size = new Vector2(rightPanel.Size.x, rightPanel.Size.y - 200);
             actionsPanel.VerticalAlignment = VerticalAlignment.Top;
             float buttonHeight = actionsPanel.Size.y / 6;
             //--Spells
             actionsPanel.Components.Add(spellsButton);
-            spellsButton.Tag = "spellsButton";
+            spellsButton.Tag = "SpellsButtonPanel";
             spellsButton.Position = new Vector2(0, buttonHeight * 0);
             spellsButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             spellsButton.BackgroundTexture = spellTexture;
@@ -363,7 +372,7 @@ namespace RetroFrame
             spellsButton.OnRightMouseClick += SpellsButton_OnMouseClick;
             //--Use
             actionsPanel.Components.Add(useButton);
-            useButton.Tag = "useButton";
+            useButton.Tag = "UseButtonPanel";
             useButton.Position = new Vector2(0, buttonHeight * 1);
             useButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             useButton.BackgroundTexture = useMagicItemTexture;
@@ -372,7 +381,7 @@ namespace RetroFrame
             useButton.OnRightMouseClick += UseButton_OnMouseClick;
             //--Weapon
             actionsPanel.Components.Add(weaponButton);
-            weaponButton.Tag = "weaponButton";
+            weaponButton.Tag = "WeaponButtonPanel";
             weaponButton.Position = new Vector2(0, buttonHeight * 2);
             weaponButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             weaponButton.BackgroundTexture = weaponTexture;
@@ -381,7 +390,7 @@ namespace RetroFrame
             weaponButton.OnRightMouseClick += WeaponButton_OnMouseClick;
             //--Transport
             actionsPanel.Components.Add(transportButton);
-            transportButton.Tag = "transportButton";
+            transportButton.Tag = "TransportButtonPanel";
             transportButton.Position = new Vector2(0, buttonHeight * 3);
             transportButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             transportButton.BackgroundTexture = transportTexture;
@@ -390,7 +399,7 @@ namespace RetroFrame
             transportButton.OnRightMouseClick += TransportButton_OnMouseClick;
             //--Map
             actionsPanel.Components.Add(mapButton);
-            mapButton.Tag = "mapButton";
+            mapButton.Tag = "MapButtonPanel";
             mapButton.Position = new Vector2(0, buttonHeight * 4);
             mapButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             mapButton.BackgroundTexture = mapTexture;
@@ -399,7 +408,7 @@ namespace RetroFrame
             mapButton.OnRightMouseClick += MapButton_OnRightMouseClick;
             //--Rest
             actionsPanel.Components.Add(restButton);
-            restButton.Tag = "restButton";
+            restButton.Tag = "RestButtonPanel";
             restButton.Position = new Vector2(0, buttonHeight * 5);
             restButton.Size = new Vector2(actionsPanel.InteriorWidth, buttonHeight);
             restButton.BackgroundTexture = restTexture;
@@ -409,7 +418,7 @@ namespace RetroFrame
 
             //========Hotkeys Panel===========
             rightPanel.Components.Add(hotkeysPanel);
-            hotkeysPanel.Tag = "hotkeysPanel";
+            hotkeysPanel.Tag = "HotkeysPanel";
             hotkeysPanel.Enabled = !ActionsPanelLocked;
             hotkeysPanel.VerticalAlignment = VerticalAlignment.Top;
             hotkeysPanel.Size = actionsPanel.Size;
@@ -426,7 +435,7 @@ namespace RetroFrame
 
                 Hotkeys.Buttons[i].Panel = new Panel();
                 hotkeysPanel.Components.Add(Hotkeys.Buttons[i].Panel);
-                Hotkeys.Buttons[i].Panel.Tag = i;
+                Hotkeys.Buttons[i].Panel.Tag = i.ToString();
                 Hotkeys.Buttons[i].Panel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyButton");
                 Hotkeys.Buttons[i].Panel.Size = new Vector2(rightPanel.InteriorWidth, buttonHeight);
                 Hotkeys.Buttons[i].Panel.TopMargin = Hotkeys.Buttons[i].Panel.BottomMargin = 4;
@@ -440,7 +449,7 @@ namespace RetroFrame
                 Panel iconContainer = new Panel();
                 Hotkeys.Buttons[i].Panel.Components.Add(iconContainer);
                 Hotkeys.Buttons[i].IconContainer = iconContainer;
-                iconContainer.Tag = "iconContainer" + i;
+                iconContainer.Tag = "IconContainer";
                 iconContainer.Position = new Vector2(20, 0);
                 iconContainer.VerticalAlignment = VerticalAlignment.Middle;
                 iconContainer.Size = new Vector2(52, 50);
@@ -449,7 +458,7 @@ namespace RetroFrame
                 Panel icon = new Panel();
                 Hotkeys.Buttons[i].Icon = icon;
                 iconContainer.Components.Add(Hotkeys.Buttons[i].Icon);
-                icon.Tag = "hotkey icon" + i;
+                icon.Tag = "Icon";
                 icon.VerticalAlignment = VerticalAlignment.Middle;
                 icon.HorizontalAlignment = HorizontalAlignment.Center;
                 icon.Size = new Vector2(5, 5);
@@ -458,7 +467,7 @@ namespace RetroFrame
 
                 Panel hotkeyIconCutout = new Panel(); //--a cutout panel placed over icon to make the icon circular
                 iconContainer.Components.Add(hotkeyIconCutout);
-                hotkeyIconCutout.Tag = "hotkey iconCutout" + i;
+                hotkeyIconCutout.Tag = "IconCutout";
                 hotkeyIconCutout.Size = new Vector2(10, 10);
                 hotkeyIconCutout.VerticalAlignment = VerticalAlignment.Middle;
                 hotkeyIconCutout.HorizontalAlignment = HorizontalAlignment.Left;
@@ -468,7 +477,7 @@ namespace RetroFrame
 
                 Hotkeys.Buttons[i].AnimationPanel = new Panel();
                 iconContainer.Components.Add(Hotkeys.Buttons[i].AnimationPanel);
-                Hotkeys.Buttons[i].AnimationPanel.Tag = "hotkey animation" + i;
+                Hotkeys.Buttons[i].AnimationPanel.Tag = "Animation";
                 Hotkeys.Buttons[i].AnimationPanel.Size = new Vector2(10, 10);
                 Hotkeys.Buttons[i].AnimationPanel.AutoSize = AutoSizeModes.ScaleToFit;
                 Hotkeys.Buttons[i].AnimationPanel.BackgroundTextureLayout = BackgroundLayout.StretchToFill;
@@ -476,6 +485,7 @@ namespace RetroFrame
 
                 Hotkeys.Buttons[i].ItemCountLabel = new TextLabel();
                 iconContainer.Components.Add(Hotkeys.Buttons[i].ItemCountLabel);
+                Hotkeys.Buttons[i].ItemCountLabel.Tag = "ItemCountLabel";
                 Hotkeys.Buttons[i].ItemCountLabel.HorizontalAlignment = HorizontalAlignment.Left;
                 Hotkeys.Buttons[i].ItemCountLabel.VerticalAlignment = VerticalAlignment.Bottom;
                 Hotkeys.Buttons[i].ItemCountLabel.TextScale = 2.5f;
@@ -486,7 +496,7 @@ namespace RetroFrame
                 TextLabel charLabel = new TextLabel();
                 Hotkeys.Buttons[i].Panel.Components.Add(charLabel);
                 Hotkeys.Buttons[i].CharLabel = charLabel;
-                charLabel.Tag = "charLabel" + i;
+                charLabel.Tag = "CharLabel";
                 charLabel.Position = new Vector2(6, 13);
                 charLabel.TextScale = defaultTextScale;
                 charLabel.TextColor = Color.gray;
@@ -495,7 +505,7 @@ namespace RetroFrame
 
                 Hotkeys.Buttons[i].DescriptionLabel = new TextLabel();
                 Hotkeys.Buttons[i].Panel.Components.Add(Hotkeys.Buttons[i].DescriptionLabel);
-                Hotkeys.Buttons[i].DescriptionLabel.Tag = "hotkey description" + i;
+                Hotkeys.Buttons[i].DescriptionLabel.Tag = "DescriptionLabel";
                 Hotkeys.Buttons[i].DescriptionLabel.Position = new Vector2(60, charLabel.Position.y);
                 Hotkeys.Buttons[i].DescriptionLabel.TextScale = defaultTextScale;
                 Hotkeys.Buttons[i].DescriptionLabel.MaxWidth = 80;
@@ -507,7 +517,7 @@ namespace RetroFrame
 
             //=======Compass==========
             rightPanel.Components.Add(compassPanel);
-            compassPanel.Tag = "compassPanel";
+            compassPanel.Tag = "CompassPanel";
             compassPanel.VerticalAlignment = VerticalAlignment.Bottom;
             compassPanel.HorizontalAlignment = HorizontalAlignment.Center;
             compassPanel.Size = new Vector2(rightPanel.InteriorWidth, vitalsPanel.Size.y);
@@ -517,6 +527,7 @@ namespace RetroFrame
             compassPanel.OnRightMouseClick += CompassPanel_OnMouseClick;
             //--Compass pointer
             compassPanel.Components.Add(compassPointerPanel);
+            compassPointerPanel.Tag = "CompassPointerPanel";
             compassPointerPanel.HorizontalAlignment = HorizontalAlignment.Center;
             compassPointerPanel.VerticalAlignment = VerticalAlignment.Middle;
             compassPointerPanel.AutoSize = AutoSizeModes.ResizeToFill;
@@ -524,7 +535,7 @@ namespace RetroFrame
             //=======Button Panel Toggle Button=========
             rightPanel.Components.Add(togglePanelButton);
             togglePanelButton.Enabled = RetroFrameMod.HotkeyGroups > 0;
-            togglePanelButton.Tag = "togglePanelButton";
+            togglePanelButton.Tag = "TogglePanelButtonPanel";
             buttonHeight = rightPanel.Size.y - compassPanel.Size.y - actionsPanel.Size.y;
             togglePanelButton.Size = new Vector2(rightPanel.InteriorWidth / 2, buttonHeight);
             togglePanelButton.Position = new Vector2(0, hotkeysPanel.Size.y);
@@ -537,7 +548,7 @@ namespace RetroFrame
             //=========Prior Hotkey Group Button========
             rightPanel.Components.Add(priorHotkeyGroupButton);
             priorHotkeyGroupButton.Enabled = RetroFrameMod.HotkeyGroups > 1;
-            priorHotkeyGroupButton.Tag = "prior";
+            priorHotkeyGroupButton.Tag = "PriorButtonPanel";
             buttonHeight = rightPanel.Size.y - compassPanel.Size.y - actionsPanel.Size.y;
             priorHotkeyGroupButton.Size = new Vector2(rightPanel.InteriorWidth / 4, buttonHeight);
             priorHotkeyGroupButton.Position = new Vector2(0, hotkeysPanel.Size.y);
@@ -550,7 +561,7 @@ namespace RetroFrame
             //=========Next Hotkey Group Button=============
             rightPanel.Components.Add(nextHotkeyGroupButton);
             nextHotkeyGroupButton.Enabled = RetroFrameMod.HotkeyGroups > 1;
-            nextHotkeyGroupButton.Tag = "next";
+            nextHotkeyGroupButton.Tag = "NextButtonPanel";
             buttonHeight = rightPanel.Size.y - compassPanel.Size.y - actionsPanel.Size.y;
             nextHotkeyGroupButton.Size = new Vector2(rightPanel.InteriorWidth / 4, buttonHeight);
             nextHotkeyGroupButton.Position = new Vector2(0, hotkeysPanel.Size.y);
@@ -563,6 +574,7 @@ namespace RetroFrame
 
             //=========Error/Warning Log Icon=========
             mainPanel.Components.Add(errorLogIcon);
+            errorLogIcon.Tag = "ErrorLogIcon";
             errorLogIcon.VerticalAlignment = VerticalAlignment.Bottom;
             errorLogIcon.HorizontalAlignment = HorizontalAlignment.Right;
             errorLogIcon.Size = new Vector2(30, 30);
@@ -577,6 +589,7 @@ namespace RetroFrame
             errorLogIcon.ToolTipText = Text.ErrorIconTooltip;
             //--log count label
             errorLogIcon.Components.Add(errorLogCountLabel);
+            errorLogCountLabel.Tag = "ErrorLogCountLabel";
             errorLogCountLabel.HorizontalAlignment = HorizontalAlignment.Left;
             errorLogCountLabel.VerticalAlignment = VerticalAlignment.Bottom;
             errorLogCountLabel.TextScale = 2.5f;
@@ -586,8 +599,34 @@ namespace RetroFrame
 
             //========Right Panel Pause Game Overlay, to darken right panel when game is paused.
             rightPanel.Components.Add(rightPanelPauseGameOverlay);
+            rightPanelPauseGameOverlay.Tag = "RightPanelPauseGameOverlay";
             rightPanelPauseGameOverlay.Size = rightPanel.Size;
             rightPanelPauseGameOverlay.BackgroundColor = new Color(0, 0, 0, 0.5f);
+
+
+            //***********************View Panel*********************************************************
+            mainPanel.Components.Add(viewPanel);
+            viewPanel.Tag = "ViewPanel";
+            viewPanel.Size = new Vector2(mainPanel.Size.x - leftPanel.Size.x - rightPanel.Size.x - 22, mainPanel.Size.y);
+            viewPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            viewPanel.VerticalAlignment = VerticalAlignment.Middle;
+
+            //***********************Top and Bottom Borders*********************************************
+            viewPanel.Components.Add(topBorderPanel);
+            topBorderPanel.Tag = "TopBorderPanel";
+            topBorderPanel.Size = new Vector2(viewPanel.Size.x, 55);
+            topBorderPanel.VerticalAlignment = VerticalAlignment.Top;
+            topBorderPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            topBorderPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("TopBorder");
+            topBorderPanel.Enabled = RetroFrameMod.ShowBorders;
+
+            viewPanel.Components.Add(bottomBorderPanel);
+            bottomBorderPanel.Tag = "BottomBorderPanel";
+            bottomBorderPanel.Size = new Vector2(viewPanel.Size.x, 55);
+            bottomBorderPanel.VerticalAlignment = VerticalAlignment.Bottom;
+            bottomBorderPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            bottomBorderPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("BottomBorder");
+            bottomBorderPanel.Enabled = RetroFrameMod.ShowBorders;
         }
 
 

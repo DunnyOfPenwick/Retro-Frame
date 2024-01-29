@@ -24,6 +24,13 @@
                 },
                 {
                     "Value": true,
+                    "Name": "ShowBorders",
+                    "Description": "See textdatabase.txt translation",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Value": true,
                     "Name": "ShowShortcutKeyInTooltip",
                     "Description": "See textdatabase.txt translation",
                     "$version": "v1",

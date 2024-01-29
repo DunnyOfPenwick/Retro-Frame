@@ -8,7 +8,7 @@ using UnityEngine;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop;
-
+using Wenzil.Console;
 
 namespace RetroFrame
 {
@@ -19,6 +19,7 @@ namespace RetroFrame
         //Mod settings 
         public static int HotkeyGroups { get; private set; }
         public static bool SilentGroupSwitching { get; private set; }
+        public static bool ShowBorders { get; private set; }
         public static bool ShowShortcutKeyInTooltip { get; private set; }
         public static bool ShowErrorLogIndicator { get; set; }
         public static bool IncludeWarnings { get; private set; }
@@ -94,13 +95,14 @@ namespace RetroFrame
 
         public static readonly List<HotkeyCallbackInfo> HotkeyCallbacks = new List<HotkeyCallbackInfo>();
 
-        OverlayPanel overlayPanel;
+        static OverlayPanel overlayPanel;
 
         bool showCompass;
         bool showVitals;
         bool showInteractionMode;
         bool showActiveSpells;
 
+        ConsoleController consoleController;
 
 
 
@@ -119,6 +121,7 @@ namespace RetroFrame
             HotkeyGroups = Mathf.Clamp(HotkeyGroups, 0, 7);
 
             SilentGroupSwitching = Mod.GetSettings().GetBool("Options", "SilentGroupSwitching");
+            ShowBorders = Mod.GetSettings().GetBool("Options", "ShowBorders");
             ShowShortcutKeyInTooltip = Mod.GetSettings().GetBool("Options", "ShowShortcutKeyInTooltip");
             ShowErrorLogIndicator = Mod.GetSettings().GetBool("Options", "ShowErrorLogIndicator");
             IncludeWarnings = Mod.GetSettings().GetBool("Options", "IncludeWarnings");
@@ -130,6 +133,10 @@ namespace RetroFrame
 
             //Establish this mod's message receiver, to get messages from other mods
             Mod.MessageReceiver = MessageReceiver;
+
+            //Creating the overlay panel.  Doing it early to make sure it exists before messages come in.
+            overlayPanel = new OverlayPanel();
+            overlayPanel.Setup();
 
             Mod.IsReady = true;
         }
@@ -155,6 +162,7 @@ namespace RetroFrame
         static void MessageReceiver(string message, object data, DFModMessageCallback callBack)
         {
             const string registerHotkeyMessage = "registerCustomHotkeyHandler";
+            const string getOverlayMessage = "getOverlay";
 
             if (message.Equals(registerHotkeyMessage, StringComparison.OrdinalIgnoreCase))
             {
@@ -188,6 +196,10 @@ namespace RetroFrame
                 {
                     Debug.LogError($"Retro-Frame: '{registerHotkeyMessage}' expects a (string,Texture2D) tuple");
                 }
+            }
+            else if (message.Equals(getOverlayMessage, StringComparison.OrdinalIgnoreCase))
+            {
+                callBack("panelReply", overlayPanel);
             }
             else
             {
@@ -314,9 +326,6 @@ namespace RetroFrame
             //Checks that all localization keys are present in [??]textdatabase.txt...logs error if not.
             Text.ValidateAllTextKeys();
 
-            overlayPanel = new OverlayPanel();
-            overlayPanel.Setup();
-
             //Set the IHasModSaveData object responsible for storing and restoring save data.
             Mod.SaveDataInterface = new ModSave();
 
@@ -329,6 +338,9 @@ namespace RetroFrame
             showVitals = DaggerfallUI.Instance.DaggerfallHUD.ShowVitals;
             showInteractionMode = DaggerfallUI.Instance.DaggerfallHUD.ShowInteractionModeIcon;
             showActiveSpells = DaggerfallUI.Instance.DaggerfallHUD.ShowActiveSpells;
+
+            GameObject console = GameObject.Find("Console");
+            consoleController = console.GetComponent<ConsoleController>();
 
             Debug.Log("Finished Start(): Retro-Frame");
         }
@@ -379,7 +391,7 @@ namespace RetroFrame
                 //We don't want any part of the overlay covering open windows.
                 GUI.depth = GameManager.IsGamePaused ? 1 : 0;
 
-                if (Event.current.type == EventType.Repaint)
+                if (Event.current.type == EventType.Repaint && !consoleController.ui.isConsoleOpen)
                 {
                     //Allow access to entire screen while drawing overlay.
                     Rect? originalCustomScreenRect = DaggerfallUI.Instance.CustomScreenRect;

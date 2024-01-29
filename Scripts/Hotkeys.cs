@@ -343,8 +343,8 @@ namespace RetroFrame
                 {
                     if (GameManager.IsGamePaused)
                         GatherHotkeyEntry(i);
-                    else if (DaggerfallUI.UIManager.TopWindow == DaggerfallUI.Instance.DaggerfallHUD)
-                        ActivateHotkey(i); //only allow hotkeys to activate if no open windows
+                    else //if (DaggerfallUI.UIManager.TopWindow == DaggerfallUI.Instance.DaggerfallHUD)
+                        ActivateHotkey(i);
                 }
             }
 
@@ -544,9 +544,6 @@ namespace RetroFrame
 
             IUserInterfaceManager uiManager = DaggerfallUI.UIManager;
 
-            if (uiManager.TopWindow != DaggerfallUI.Instance.DaggerfallHUD)
-                return; //Shouldn't be any windows open during hotkey activate
-
             ItemCollection collection = playerEntity.Items;
 
             // Allow item to handle its own use.
@@ -703,7 +700,7 @@ namespace RetroFrame
             {
                 //Equip/unequip an equippable item.
                 //There  is additional logic associated with equipping/unequipping items, such as equip delays.
-                //For that reason, equip/unequip will be performed through the DaggerfallInventoryWindow mechanism.
+                //For that reason, equip/unequip will be performed through the DaggerfallInventoryWindow.
 
                 DaggerfallInventoryWindow window = DaggerfallUI.Instance.InventoryWindow;
 
@@ -736,6 +733,29 @@ namespace RetroFrame
             }
 
         }
+
+
+        static void ActivateSpell(EffectBundleSettings spell)
+        {
+            // Lycanthrope spells are free
+            bool noSpellPointCost = spell.Tag == PlayerEntity.lycanthropySpellTag;
+
+            // Assign to player effect manager as ready spell
+            DaggerfallEntityBehaviour caster = GameManager.Instance.PlayerEntityBehaviour;
+
+            EntityEffectBundle effectBundle = new EntityEffectBundle(spell, caster);
+
+            EntityEffectManager playerEffectManager = GameManager.Instance.PlayerEffectManager;
+
+            playerEffectManager.SetReadySpell(effectBundle, noSpellPointCost);
+        }
+
+
+        static void ActivateCallback(RetroFrameMod.HotkeyCallbackInfo callback, int index)
+        {
+            callback.Callback(callback.Description, index);
+        }
+
 
 
         /// <summary>
@@ -1049,29 +1069,6 @@ namespace RetroFrame
 
             return text;
         }
-
-
-        static void ActivateSpell(EffectBundleSettings spell)
-        {
-            // Lycanthrope spells are free
-            bool noSpellPointCost = spell.Tag == PlayerEntity.lycanthropySpellTag;
-
-            // Assign to player effect manager as ready spell
-            DaggerfallEntityBehaviour caster = GameManager.Instance.PlayerEntityBehaviour;
-
-            EntityEffectBundle effectBundle = new EntityEffectBundle(spell, caster);
-
-            EntityEffectManager playerEffectManager = GameManager.Instance.PlayerEffectManager;
-
-            playerEffectManager.SetReadySpell(effectBundle, noSpellPointCost);
-        }
-
-
-        static void ActivateCallback(RetroFrameMod.HotkeyCallbackInfo callback, int index)
-        {
-            callback.Callback(callback.Description, index);
-        }
-
 
 
         /// <summary>
