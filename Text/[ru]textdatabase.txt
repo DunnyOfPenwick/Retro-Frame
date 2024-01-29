@@ -1,0 +1,42 @@
+-- Localized text for Retro-Frame mod
+
+-- Text values are literals and should be wrapped in quotes ""
+schema: *key,$text
+
+-- Mod Settings localization
+Settings.Options.Name, "Варианты"
+Settings.Options.HotkeyGroups.Name, "ГруппыГорячихКлавиш"
+Settings.Options.HotkeyGroups.Description, "Количество групп горячих клавиш, к которым\rвы можете получить доступ.\rЗначение '0' отключает горячие клавиши."
+Settings.Options.SilentGroupSwitching.Name, "БесшумноеПереключениеГрупп"
+Settings.Options.SilentGroupSwitching.Description, "Не воспроизводить звук при переключении группы горячих клавиш"
+Settings.Options.ShowShortcutKeyInTooltip.Name, "ПоказатьСочетаниеКлавишВоВсплывающейПодсказке"
+Settings.Options.ShowShortcutKeyInTooltip.Description, "Показывать сочетания клавиш во всплывающих подсказках\rмыши для игровых кнопок"
+Settings.Options.ShowErrorLogIndicator.Name, "ПоказатьИндикаторЖурналаОшибок"
+Settings.Options.ShowErrorLogIndicator.Description, "Кратковременно покажите индикатор журнала\rошибок в правом нижнем углу при возникновении\rсистемных ошибок."
+Settings.Options.IncludeWarnings.Name, "ПоказатьПредупреждения"
+Settings.Options.IncludeWarnings.Description, "Включите предупреждающие сообщения, если включен\rфлажок 'Показать журнал ошибок'."
+Settings.Options.IncludeAll.Name, "ВключитьВсе"
+Settings.Options.IncludeAll.Description, "Включите все сообщения, если включен\rфлажок «Показать журнал ошибок»."
+
+
+-- General
+LogFileLocation, "Местоположение Файла Журнала"
+LogHeader, "=======Самая Последняя Запись Журнала======"
+StackTraceHeader, "-------Трассировки Стека-------"
+Previous5, "=======Предыдущие 10======="
+CrosshairToggle, "Переключение Перекрестия"
+ErrorIconTooltip, "Щелчок Левой: блокировка/разблокировка окна журнала\rЩелчок Правой: прекращение отображения ошибок";
+
+--Hotkeys
+TapNewKey, "Нажмите новый ключ сейчас"
+
+--HotkeyPopupWindow
+Hotkeys, "Горячие Клавиши"
+Set, "Установить: нажмите горячую клавишу, находясь в инвентаре/заклинаниях."
+Clear, "Чистить: Щелчок Правой"
+Choose, "...или выберите:"
+ClearHotkey, "<Очистить горячую клавишу>"
+Cancel, "Отмена"
+
+
+

@@ -1,0 +1,42 @@
+-- Localized text for Retro-Frame mod
+
+-- Text values are literals and should be wrapped in quotes ""
+schema: *key,$text
+
+-- Mod Settings localization
+Settings.Options.Name, "Options"
+Settings.Options.HotkeyGroups.Name, "HotkeyGroups"
+Settings.Options.HotkeyGroups.Description, "The number of hotkey groups you can access.\rA value of '0' disables hotkeys."
+Settings.Options.SilentGroupSwitching.Name, "SilentGroupSwitching"
+Settings.Options.SilentGroupSwitching.Description, "Don't play sound when switching hotkey group"
+Settings.Options.ShowShortcutKeyInTooltip.Name, "ShowShortcutKeyInTooltip"
+Settings.Options.ShowShortcutKeyInTooltip.Description, "Show keyboard shortcut keys in mouse tooltips\rfor Daggerfall HUD buttons"
+Settings.Options.ShowErrorLogIndicator.Name, "ShowErrorLogIndicator"
+Settings.Options.ShowErrorLogIndicator.Description, "Briefly show an error log indicator in the lower right\rcorner when system errors occur."
+Settings.Options.IncludeWarnings.Name, "IncludeWarnings"
+Settings.Options.IncludeWarnings.Description, "Include warning messages when\rthe 'Show Error Log' box is enabled."
+Settings.Options.IncludeAll.Name, "IncludeAll"
+Settings.Options.IncludeAll.Description, "Include all messages when\rthe 'Show Error Log' box is enabled."
+
+
+-- General
+LogFileLocation, "Log File Location"
+LogHeader, "=======Most Recent Log Entry======="
+StackTraceHeader, "-------Stack Trace-------"
+Previous5, "=======Previous 10======="
+CrosshairToggle, "Reticle Toggle"
+ErrorIconTooltip, "Left-Click: Lock/Unlock Log Window\rRight-Click: Stop Showing Errors";
+
+--Hotkeys
+TapNewKey, "Tap new key now"
+
+--HotkeyPopupWindow
+Hotkeys, "Hotkeys"
+Set, "Set: tap hotkey while over inventory/spells"
+Clear, "Clear: right-click"
+Choose, "...or choose:"
+ClearHotkey, "<Clear Hotkey>"
+Cancel, "Cancel"
+
+
+

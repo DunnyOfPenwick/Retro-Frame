@@ -1,0 +1,42 @@
+-- Localized text for Retro-Frame mod
+
+-- Text values are literals and should be wrapped in quotes ""
+schema: *key,$text
+
+-- Mod Settings localization
+Settings.Options.Name, "Opções"
+Settings.Options.HotkeyGroups.Name, "Grupos deTeclas deAtalho"
+Settings.Options.HotkeyGroups.Description, "O número de grupos de teclas de atalho que você pode acessar.\rUm valor '0' desativa as teclas de atalho."
+Settings.Options.SilentGroupSwitching.Name, "ComutaçãoSilenciosa deGrupo"
+Settings.Options.SilentGroupSwitching.Description, "Não reproduz som ao mudar de grupo de teclas de atalho"
+Settings.Options.ShowShortcutKeyInTooltip.Name, "MostrarTecla deAtalho naDica deFerramenta"
+Settings.Options.ShowShortcutKeyInTooltip.Description, "Mostrar teclas de atalho do teclado nas dicas\rdo mouse para botões Daggerfall HUD"
+Settings.Options.ShowErrorLogIndicator.Name, "MostrarIndicador deRegistro deErros"
+Settings.Options.ShowErrorLogIndicator.Description, "Mostre brevemente um indicador de registro de erros\rno canto inferior direito quando ocorrerem erros do sistema."
+Settings.Options.IncludeWarnings.Name, "IncluirAvisos"
+Settings.Options.IncludeWarnings.Description, "Inclui mensagens de aviso quando a caixa\r'Mostrar log de erros' está habilitada."
+Settings.Options.IncludeAll.Name, "IncluirTudo"
+Settings.Options.IncludeAll.Description, "Incluir todas as mensagens quando a caixa\r'Mostrar log de erros' estiver habilitada."
+
+
+-- General
+LogFileLocation, "Localização do Arquivo de Log"
+LogHeader, "=======Entrada de Registro Mais Recente======"
+StackTraceHeader, "-------Rastreamento de Pilha-------"
+Previous5, "=======10 Anteriores======="
+CrosshairToggle, "Alternar Retícula"
+ErrorIconTooltip, "Clique Esquerdo: bloquear/desbloquear janela de registro\rClique Direito: parar de mostrar erros";
+
+--Hotkeys
+TapNewKey, "Toque na nova tecla agora"
+
+--HotkeyPopupWindow
+Hotkeys, "Teclas de Atalho"
+Set, "Definir: toque na tecla de atalho enquanto estiver no inventário/feitiços"
+Clear, "Limpar: clique com o botão direito"
+Choose, "...ou escolha:"
+ClearHotkey, "<Limpar tecla de atalho>"
+Cancel, "Cancelar"
+
+
+

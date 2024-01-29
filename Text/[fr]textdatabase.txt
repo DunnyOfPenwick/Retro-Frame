@@ -1,0 +1,42 @@
+-- Localized text for Retro-Frame mod
+
+-- Text values are literals and should be wrapped in quotes ""
+schema: *key,$text
+
+-- Mod Settings localization
+Settings.Options.Name, "Possibilités"
+Settings.Options.HotkeyGroups.Name, "Groupes deRaccourcisClavier"
+Settings.Options.HotkeyGroups.Description, "Le nombre de groupes de raccourcis clavier auxquels vous pouvez accéder.\rUne valeur de « 0 » désactive les raccourcis clavier."
+Settings.Options.SilentGroupSwitching.Name, "Commutation deGroupeSilencieuse"
+Settings.Options.SilentGroupSwitching.Description, "Ne pas émettre de son lors du changement\rde groupe de raccourcis clavier"
+Settings.Options.ShowShortcutKeyInTooltip.Name, "Afficher laTouche deRaccourci dans l'info-bulle"
+Settings.Options.ShowShortcutKeyInTooltip.Description, "Afficher les touches de raccourci clavier dans les info-bulles\rde la souris pour les boutons du HUD de Daggerfall"
+Settings.Options.ShowErrorLogIndicator.Name, "Afficher l'indicateur duJournal desErreurs"
+Settings.Options.ShowErrorLogIndicator.Description, "Afficher brièvement un indicateur de journal des erreurs\rdans le coin inférieur droit lorsque des erreurs système se produisent."
+Settings.Options.IncludeWarnings.Name, "Inclure desAvertissements"
+Settings.Options.IncludeWarnings.Description, "Incluez des messages d'avertissement lorsque\rla case « Afficher le journal des erreurs » est activée."
+Settings.Options.IncludeAll.Name, "InclureTout"
+Settings.Options.IncludeAll.Description, "Inclut tous les messages lorsque la case\r« Afficher le journal des erreurs » est activée."
+
+
+-- General
+LogFileLocation, "Emplacement du Fichier Journal"
+LogHeader, "=======Entrée de Journal la Plus Récente======"
+StackTraceHeader, "-------Trace de la Pile-------"
+Previous5, "=======Precedent 10======="
+CrosshairToggle, "Basculer le Réticule"
+ErrorIconTooltip, "Clic Gauche : verrouiller/déverrouiller la fenêtre du journal\rClic Droit : arrêter d'afficher les erreurs";
+
+--Hotkeys
+TapNewKey, "Appuyez sur une nouvelle clé maintenant"
+
+--HotkeyPopupWindow
+Hotkeys, "Raccourcis Clavier"
+Set, "Définir : appuyez sur le raccourci clavier pendant l'inventaire/sortilege"
+Clear, "Effacer : clic droit"
+Choose, "...ou choisissez :"
+ClearHotkey, "<Effacer le Raccourci Clavier>"
+Cancel, "Annuler"
+
+
+
