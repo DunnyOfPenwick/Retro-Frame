@@ -6,6 +6,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
+//We're setting field values using reflection, so disabling the 'Field is never assigned to...' warning.
+#pragma warning disable 0649
 
 namespace RetroFrame
 {

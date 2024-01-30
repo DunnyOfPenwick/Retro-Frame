@@ -1690,7 +1690,7 @@ namespace RetroFrame
         /// </summary>
         void HotkeyButton_OnMouseEnter(BaseScreenComponent sender)
         {
-            HoveredHotkeyButtonIndex = (int)sender.Tag;
+            HoveredHotkeyButtonIndex = int.Parse((string)sender.Tag);
         }
 
 
