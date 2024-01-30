@@ -143,6 +143,7 @@ namespace RetroFrame
             //Only perform validation occasionally, for efficiency.
             if (Time.frameCount % 5 == 0)
             {
+                InitInventoryEventHandler();
                 RefreshSystemKeybinds();
                 Validate();
             }
@@ -444,15 +445,6 @@ namespace RetroFrame
         /// </summary>
         static void GatherHotkeyInventory(int hotkeyIndex, DaggerfallInventoryWindow window)
         {
-            //The InventoryWindow gets created multiple times during game startup.
-            //Wait until game is in progress before attaching event handler to the inventory window.
-            if (!isEventListenerInitialized)
-            {
-                DaggerfallUI.Instance.InventoryWindow.OnItemHover += OnItemHoverHandler;
-                isEventListenerInitialized = true;
-            }
-
-
             //hoverItem comes from DaggerfallInventoryWindow, recieved by an event handler.
             //This doesn't always work right.
             //'hoverItem' was the last item hovered over, but the player may have moved the mouse cursor since then.
@@ -754,6 +746,23 @@ namespace RetroFrame
         static void ActivateCallback(RetroFrameMod.HotkeyCallbackInfo callback, int index)
         {
             callback.Callback(callback.Description, index);
+        }
+
+
+        /// <summary>
+        /// The InventoryWindow gets created multiple times during game startup.
+        /// Wait until the window is first opened before attaching event handler to the inventory window.
+        /// </summary>
+        static void InitInventoryEventHandler()
+        {
+            if (!isEventListenerInitialized)
+            {
+                if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallInventoryWindow)
+                {
+                    DaggerfallUI.Instance.InventoryWindow.OnItemHover += OnItemHoverHandler;
+                    isEventListenerInitialized = true;
+                }
+            }
         }
 
 
