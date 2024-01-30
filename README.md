@@ -116,7 +116,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
         - ViewPanel
             - TopBorderPanel
             - BottomBorderPanel
-    - ToolTipContainerPanel
+    - ToolTipContainerPanel (needed so tooltips scale correctly)
 
 
 
