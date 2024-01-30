@@ -50,6 +50,9 @@ void Start()
             Panel actions = (Panel)FindChild(right, "ActionsPanel");
             Panel weapon = (Panel)FindChild(actions, "WeaponButtonPanel");
             weapon.BackgroundTexture = MyReplacementTexture;
+            //Note: If you want to change what the button actually does on-click, disable the original
+            //button and create another with the same Size and Position and add your own event handler.
+            //Then add your new button to the ActionsPanel Components list.
         }
 
     }
@@ -69,20 +72,21 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 ```
 
 ### Structure of Overlay Panel Content
-- OverlayPanel
+- OverlayPanel (default BackgroundTexture is 'Frame')
     - MainPanel
         - LeftPanel
-            - CharacterPanel
+            - CharacterPanel (default BackgroundTexture is 'HeadFrame')
                 - HeadPanel
                 - NameLabel
             - InventoryButtonPanel
             - InteractionModeButtonPanel
-            - VitalsPanel
+            - VitalsPanel (default BackgroundTexture is 'VitalsFrame'
                 - HUDVitalsBars
             - ActiveEffectsPanel
                 - ActiveEffectsRowPanel_ (where _ is 0 through 5)
                     - DescriptionLabel_
                     - Icon_ (3 icons per row)
+                        -(untagged IconCutout) (default BackgroundTexture 'IconCutout')
             - LeftPanelPauseGameOverlay
         - InstSpellIconContainer
             - (untagged icon)
@@ -90,32 +94,32 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
         - InstSpellLabel
         - RightPanel
             - ActionsPanel
-                - SpellsButtonPanel
+                - SpellsButtonPanel (The BackgroundTexture for the buttons is clipped from internal storage)
                 - UseButtonPanel
                 - WeaponButtonPanel
                 - TransportButtonPanel
                 - MapButtonPanel
                 - RestButtonPanel
             - HotkeysPanel
-                - _ (where _ is the panel number, 0-9)
+                - _ (where _ is the panel number, 0-9) (default BackgroundTexture is 'HotkeyButton')
                     - IconContainer
                         - Icon
-                        - IconCutout
+                        - IconCutout (default BackgroundTexture is 'HotkeyIconCutout')
                         - Animation
                         - ItemCountLabel
                     - CharLabel (This is the label that shows the key bound to the hotkey)
                     - DescriptionLabel
             - CompassPanel
                 - CompassPointerPanel
-            - TogglePanelButtonPanel
-            - PriorButtonPanel
-            - NextButtonPanel
+            - TogglePanelButtonPanel (default BackgroundTexture is 'Switch')
+            - PriorButtonPanel (default BackgroundTexture is 'Prior')
+            - NextButtonPanel (default BackgroundTexture is 'Next')
             - RightPanelPauseGameOverlay
-        - ErrorLogIcon
+        - ErrorLogIcon (default BackgroundTexture is 'ErrorLogIcon')
             - ErrorLogCountLabel
         - ViewPanel
-            - TopBorderPanel
-            - BottomBorderPanel
+            - TopBorderPanel (default BackgroundTexture is 'TopBorder')
+            - BottomBorderPanel (default BackgroundTexture is 'BottomBorder')
     - ToolTipContainerPanel (needed so tooltips scale correctly)
 
 
