@@ -76,7 +76,7 @@ namespace RetroFrame
 
         float defaultTextScale = 3.5f;
 
-        HotkeyPopupWindow hotkeyPopup = new HotkeyPopupWindow(DaggerfallUI.UIManager);
+        readonly HotkeyPopupWindow hotkeyPopup = new HotkeyPopupWindow(DaggerfallUI.UIManager);
 
         bool triggerHeadChange;
         Texture2D shadowHeadTexture;
