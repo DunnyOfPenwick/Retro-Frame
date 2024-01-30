@@ -76,7 +76,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
     - MainPanel
         - LeftPanel
             - CharacterPanel (default BackgroundTexture is 'HeadFrame')
-                - HeadPanel
+                - HeadPanel (BackgroundTexture gets periodically refreshed from the standard big HUD character panel when needed)
                    - (Untagged headShadePanel, to be used by future mod)
                    - (Untagged headTintPanel, normally transparent, can flash colors to indicate character status)
                 - NameLabel
