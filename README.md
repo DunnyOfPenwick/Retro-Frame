@@ -89,7 +89,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                     - DescriptionLabel_
                     - Icon_ (3 icons per row)
                         - (untagged IconCutout) (default BackgroundTexture 'IconCutout')
-            - LeftPanelPauseGameOverlay
+            - LeftPanelPauseGameOverlay (Darkens left panel when game paused)
         - InstSpellIconContainer
             - (untagged icon)
             - (untagged icon overlay)
@@ -116,7 +116,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
             - TogglePanelButtonPanel (default BackgroundTexture is 'Switch')
             - PriorButtonPanel (default BackgroundTexture is 'Prior')
             - NextButtonPanel (default BackgroundTexture is 'Next')
-            - RightPanelPauseGameOverlay
+            - RightPanelPauseGameOverlay (Darkens right panel when game paused)
         - ErrorLogIcon (default BackgroundTexture is 'ErrorLogIcon')
             - ErrorLogCountLabel
         - ViewPanel
