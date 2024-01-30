@@ -7,7 +7,7 @@ custom hotkey actions as well as to retrieve the content of the overlay panel.
 See https://www.dfworkshop.net/projects/daggerfall-unity/modding/features/#mods-interaction
 
 
-##Registering Custom Hotkey Action Handlers
+## Registering Custom Hotkey Action Handlers
 Use the "registerCustomHotkeyHandler" message, providing a tuple with a ('Description' string, a Texture2D icon), and then the handler method.
 The handler will be passed the original Description string you provided and the index number of the hotkey that was activated.
 Example:
@@ -28,7 +28,7 @@ void MyHandler(string description, object index)
 ```
 
 
-##Getting The Overlay Panel Content
+## Getting The Overlay Panel Content
 Use the "getOverlay" message.  It will return the overlay Panel which you can then modify.
 The overlay Panel contains numerous nested child panels, the structure is shown below the example code.
 Example of changing the Weapon button background texture:
@@ -67,8 +67,8 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 
 ```
 
-###Structure of Overlay Panel Content
-OverlayPanel
+### Structure of Overlay Panel Content
+- OverlayPanel
     MainPanel
         LeftPanel
             CharacterPanel
