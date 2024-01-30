@@ -31,6 +31,7 @@ void MyHandler(string description, object index)
 ## Getting The Overlay Panel Content
 Use the "getOverlay" message.  It will return the overlay Panel which you can then modify.
 The overlay Panel contains numerous nested child panels, the structure is shown below the example code.
+Each panel and label has a Tag containing a string identifying it.
 Example of changing the Weapon button background texture:
 ```
 void Start()
@@ -69,53 +70,53 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 
 ### Structure of Overlay Panel Content
 - OverlayPanel
-    MainPanel
-        LeftPanel
-            CharacterPanel
-                HeadPanel
-                NameLabel
-            InventoryButtonPanel
-            InteractionModeButtonPanel
-            VitalsPanel
-                HUDVitalsBars
-            ActiveEffectsPanel
-                ActiveEffectsRowPanel_ (where _ is 0 through 5)
-                    DescriptionLabel_
-                    Icon_ (3 icons per row)
-            LeftPanelPauseGameOverlay
-        InstSpellIconContainer
-            (untagged icon)
-            (untagged icon overlay)
-        InstSpellLabel
-        RightPanel
-            ActionsPanel
-                SpellsButtonPanel
-                UseButtonPanel
-                WeaponButtonPanel
-                TransportButtonPanel
-                MapButtonPanel
-                RestButtonPanel
-            HotkeysPanel
-                _ (where _ is the panel number, 0-9)
-                    IconContainer
-                        Icon
-                        IconCutout
-                        Animation
-                        ItemCountLabel
-                    CharLabel (This is the label that shows the key bound to the hotkey)
-                    DescriptionLabel
-            CompassPanel
-                CompassPointerPanel
-            TogglePanelButtonPanel
-            PriorButtonPanel
-            NextButtonPanel
-            RightPanelPauseGameOverlay
-        ErrorLogIcon
-            ErrorLogCountLabel
-        ViewPanel
-            TopBorderPanel
-            BottomBorderPanel
-    ToolTipContainerPanel
+    - MainPanel
+        - LeftPanel
+            - CharacterPanel
+                - HeadPanel
+                - NameLabel
+            - InventoryButtonPanel
+            - InteractionModeButtonPanel
+            - VitalsPanel
+                - HUDVitalsBars
+            - ActiveEffectsPanel
+                - ActiveEffectsRowPanel_ (where _ is 0 through 5)
+                    - DescriptionLabel_
+                    - Icon_ (3 icons per row)
+            - LeftPanelPauseGameOverlay
+        - InstSpellIconContainer
+            - (untagged icon)
+            - (untagged icon overlay)
+        - InstSpellLabel
+        - RightPanel
+            - ActionsPanel
+                - SpellsButtonPanel
+                - UseButtonPanel
+                - WeaponButtonPanel
+                - TransportButtonPanel
+                - MapButtonPanel
+                - RestButtonPanel
+            - HotkeysPanel
+                - _ (where _ is the panel number, 0-9)
+                    - IconContainer
+                        - Icon
+                        - IconCutout
+                        - Animation
+                        - ItemCountLabel
+                    - CharLabel (This is the label that shows the key bound to the hotkey)
+                    - DescriptionLabel
+            - CompassPanel
+                - CompassPointerPanel
+            - TogglePanelButtonPanel
+            - PriorButtonPanel
+            - NextButtonPanel
+            - RightPanelPauseGameOverlay
+        - ErrorLogIcon
+            - ErrorLogCountLabel
+        - ViewPanel
+            - TopBorderPanel
+            - BottomBorderPanel
+    - ToolTipContainerPanel
 
 
 
