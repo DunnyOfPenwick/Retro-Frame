@@ -86,7 +86,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                 - ActiveEffectsRowPanel_ (where _ is 0 through 5)
                     - DescriptionLabel_
                     - Icon_ (3 icons per row)
-                        -(untagged IconCutout) (default BackgroundTexture 'IconCutout')
+                        - (untagged IconCutout) (default BackgroundTexture 'IconCutout')
             - LeftPanelPauseGameOverlay
         - InstSpellIconContainer
             - (untagged icon)
