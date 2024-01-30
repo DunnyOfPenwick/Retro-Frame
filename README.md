@@ -77,10 +77,12 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
         - LeftPanel
             - CharacterPanel (default BackgroundTexture is 'HeadFrame')
                 - HeadPanel
+                   - (Untagged headShadePanel, to be used by future mod)
+                   - (Untagged headTintPanel, normally transparent, can flash colors to indicate character status)
                 - NameLabel
             - InventoryButtonPanel
             - InteractionModeButtonPanel
-            - VitalsPanel (default BackgroundTexture is 'VitalsFrame'
+            - VitalsPanel (default BackgroundTexture is 'VitalsFrame')
                 - HUDVitalsBars
             - ActiveEffectsPanel
                 - ActiveEffectsRowPanel_ (where _ is 0 through 5)
