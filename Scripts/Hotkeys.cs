@@ -147,15 +147,6 @@ namespace RetroFrame
                 Validate();
             }
 
-            //The InventoryWindow gets created multiple times during game startup.
-            //Wait until game is in progress before attaching event handler to the inventory window.
-            if (!isEventListenerInitialized && GameManager.Instance.StateManager.GameInProgress)
-            {
-                DaggerfallUI.Instance.InventoryWindow.OnItemHover += OnItemHoverHandler;
-
-                isEventListenerInitialized = true;
-            }
-
             CheckFlashErrorPanels();
 
         }
@@ -393,11 +384,11 @@ namespace RetroFrame
                 if (k >= KeyCode.Alpha0 && k <= KeyCode.Alpha9)
                     return ((char)('0' + k - KeyCode.Alpha0)).ToString();
                 else if (k >= KeyCode.Keypad0 && k <= KeyCode.Keypad9)
-                    return "#" + ((char)('0' + k - KeyCode.Keypad0)).ToString();
+                    return ((char)('0' + k - KeyCode.Keypad0)).ToString();
                 else if (text.StartsWith("KPAD") || text.StartsWith("KPD"))
-                    return "#" + text.Substring(4);
+                    return text.Substring(4);
                 else if (text.StartsWith("Keypad"))
-                    return "#" + text.Substring(6);
+                    return text.Substring(6);
                 else
                     return text;
             }
@@ -453,6 +444,15 @@ namespace RetroFrame
         /// </summary>
         static void GatherHotkeyInventory(int hotkeyIndex, DaggerfallInventoryWindow window)
         {
+            //The InventoryWindow gets created multiple times during game startup.
+            //Wait until game is in progress before attaching event handler to the inventory window.
+            if (!isEventListenerInitialized)
+            {
+                DaggerfallUI.Instance.InventoryWindow.OnItemHover += OnItemHoverHandler;
+                isEventListenerInitialized = true;
+            }
+
+
             //hoverItem comes from DaggerfallInventoryWindow, recieved by an event handler.
             //This doesn't always work right.
             //'hoverItem' was the last item hovered over, but the player may have moved the mouse cursor since then.
@@ -792,13 +792,13 @@ namespace RetroFrame
             keyText = GetKeyText(NextGroupKey, false);
             OverlayPanel.NextHotkeyGroupButton.ToolTipText = $"[{keyText}]\r{Text.TapNewKey}";
 
-
             //Validate each hotkey entry and update its UI button.
             for (int i = 0; i < Entries.Length; ++i)
             {
                 Buttons[i].IconContainer.Enabled = true;
                 Buttons[i].DescriptionLabel.Enabled = true;
                 Buttons[i].Panel.ToolTipText = "";
+                Buttons[i].AnimationPanel.AnimatedBackgroundTextures = null;
 
                 if (Entries[i].Item != null)
                     ValidateItemHotkey(i);

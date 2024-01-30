@@ -1664,11 +1664,11 @@ namespace RetroFrame
         /// </summary>
         void HotkeyButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            int hotkeyIndex = (int)sender.Tag;
+            int index = int.Parse((string)sender.Tag);
 
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
-            hotkeyPopup.Show(hotkeyIndex);
+            hotkeyPopup.Show(index);
         }
 
 
@@ -1678,7 +1678,8 @@ namespace RetroFrame
         /// </summary>
         void HotkeyButton_OnRightMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            int index = (int)sender.Tag;
+            int index = int.Parse((string)sender.Tag);
+
             Hotkeys.Set(index, null);  //delete the hotkey
 
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
