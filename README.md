@@ -111,8 +111,8 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                         - ItemCountLabel
                     - CharLabel (This is the label that shows the key bound to the hotkey)
                     - DescriptionLabel
-            - CompassPanel
-                - CompassPointerPanel
+            - CompassPanel (default BackgroundTexture clipped from internal storage)
+                - CompassPointerPanel (default BackgroundTexture is from an array of 32 textures from internal storage, swapped on Update)
             - TogglePanelButtonPanel (default BackgroundTexture is 'Switch')
             - PriorButtonPanel (default BackgroundTexture is 'Prior')
             - NextButtonPanel (default BackgroundTexture is 'Next')
