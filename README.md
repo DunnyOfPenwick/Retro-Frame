@@ -90,13 +90,13 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                     - Icon_ (3 icons per row)
                         - (untagged IconCutout) (default BackgroundTexture 'IconCutout')
             - LeftPanelPauseGameOverlay (Darkens left panel when game paused)
-        - InstSpellIconContainer
+        - InstSpellIconContainer (this is the icon for any instantaneous spell that is briefly shown at the bottom of the screen)
             - (untagged icon)
             - (untagged icon overlay)
-        - InstSpellLabel
+        - InstSpellLabel (where the name of the instantaneous spell is shown)
         - RightPanel
             - ActionsPanel
-                - SpellsButtonPanel (The BackgroundTexture for the buttons is clipped from internal storage)
+                - SpellsButtonPanel (The default BackgroundTexture for the buttons is clipped from internal storage)
                 - UseButtonPanel
                 - WeaponButtonPanel
                 - TransportButtonPanel
