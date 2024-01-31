@@ -73,7 +73,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 
 ### Structure of Overlay Panel Content
 - OverlayPanel (default BackgroundTexture is 'Frame')
-    - MainPanel (main panel is sized 1280x800)
+    - MainPanel
         - LeftPanel
             - CharacterPanel (default BackgroundTexture is 'HeadFrame')
                 - HeadPanel (BackgroundTexture gets periodically refreshed from the standard big HUD character panel when needed)
