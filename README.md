@@ -107,7 +107,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                     - IconContainer
                         - Icon
                         - IconCutout (default BackgroundTexture is 'HotkeyIconCutout')
-                        - Animation
+                        - Animation (for the animated swirl around magic items)
                         - ItemCountLabel
                     - CharLabel (This is the label that shows the key bound to the hotkey)
                     - DescriptionLabel
