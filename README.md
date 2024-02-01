@@ -71,14 +71,14 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 
 ```
 
-### Structure of Overlay Panel Content
+### Structure of Overlay Panel Content (current as of v1.0.3)
 - OverlayPanel (default BackgroundTexture is 'Frame')
     - MainPanel
         - LeftPanel
             - CharacterPanel (default BackgroundTexture is 'HeadFrame')
                 - HeadPanel (BackgroundTexture gets periodically refreshed from the standard big HUD character panel when needed)
-                   - (Untagged headShadePanel, to be used by future mod)
-                       - (Untagged headTintPanel, normally transparent, can flash colors to indicate character status)
+                   - HeadShadePanel (to be used by future mod)
+                       - HeadTintPanel (normally transparent, can flash colors to indicate character status)
                 - NameLabel
             - InventoryButtonPanel
             - InteractionModeButtonPanel
@@ -91,8 +91,8 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                         - (untagged IconCutout) (default BackgroundTexture 'IconCutout')
             - LeftPanelPauseGameOverlay (Darkens left panel when game paused)
         - InstSpellIconContainer (this is the icon for any instantaneous spell that is briefly shown at the bottom of the screen)
-            - (untagged icon)
-            - (untagged icon overlay)
+            - InstSpellIcon
+            - InstSpellIconOverlay
         - InstSpellLabel (where the name of the instantaneous spell is shown)
         - RightPanel
             - ActionsPanel
