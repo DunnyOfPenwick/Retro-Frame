@@ -729,6 +729,10 @@ namespace RetroFrame
 
         static void ActivateSpell(EffectBundleSettings spell)
         {
+            //Don't allow spamming another spell until previous is completely finished.
+            if (GameManager.Instance.PlayerSpellCasting.IsPlayingAnim)
+                return;
+
             // Lycanthrope spells are free
             bool noSpellPointCost = spell.Tag == PlayerEntity.lycanthropySpellTag;
 
@@ -825,8 +829,6 @@ namespace RetroFrame
                     text = "";
                 Buttons[i].CharLabel.Text = text;
                 Buttons[i].CharLabel.TextColor = charLabelDefaultColor;
-
-                text = ControlsConfigManager.Instance.GetButtonText(Entries[i].KeyPress);
 
                 if (modifier == KeyCode.LeftControl || modifier == KeyCode.RightControl)
                     Buttons[i].CharLabel.TextColor = charLabelControlColor;

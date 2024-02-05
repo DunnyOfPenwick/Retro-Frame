@@ -19,6 +19,8 @@ Settings.Options.IncludeWarnings.Name, "Inclure desAvertissements"
 Settings.Options.IncludeWarnings.Description, "Incluez des messages d'avertissement lorsque\rla case « Afficher le journal des erreurs » est activée."
 Settings.Options.IncludeAll.Name, "InclureTout"
 Settings.Options.IncludeAll.Description, "Inclut tous les messages lorsque la case\r« Afficher le journal des erreurs » est activée."
+Settings.Options.Mode640x400Replacement.Name = "Remplacement duMode 640x400";
+Settings.Options.Mode640x400Replacement.Description, "Remplacez le mode 640x400 par un mode de résolution plus élevée."
 
 
 -- General

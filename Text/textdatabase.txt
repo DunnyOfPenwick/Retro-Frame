@@ -19,6 +19,8 @@ Settings.Options.IncludeWarnings.Name, "IncludeWarnings"
 Settings.Options.IncludeWarnings.Description, "Include warning messages when\rthe 'Show Error Log' box is enabled."
 Settings.Options.IncludeAll.Name, "IncludeAll"
 Settings.Options.IncludeAll.Description, "Include all messages when\rthe 'Show Error Log' box is enabled."
+Settings.Options.Mode640x400Replacement.Name = "Mode640x400Replacement";
+Settings.Options.Mode640x400Replacement.Description, "Replace 640x400 mode with a higher resolution mode."
 
 
 -- General

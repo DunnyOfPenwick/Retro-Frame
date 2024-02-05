@@ -19,6 +19,8 @@ Settings.Options.IncludeWarnings.Name, "ПоказатьПредупрежден
 Settings.Options.IncludeWarnings.Description, "Включите предупреждающие сообщения, если включен\rфлажок 'Показать журнал ошибок'."
 Settings.Options.IncludeAll.Name, "ВключитьВсе"
 Settings.Options.IncludeAll.Description, "Включите все сообщения, если включен\rфлажок «Показать журнал ошибок»."
+Settings.Options.Mode640x400Replacement.Name = "Режим 640x400 Замена";
+Settings.Options.Mode640x400Replacement.Description, "Замените режим 640x400 режимом с более высоким разрешением."
 
 
 -- General

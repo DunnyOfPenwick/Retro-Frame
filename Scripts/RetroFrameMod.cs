@@ -9,6 +9,8 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop;
 using Wenzil.Console;
+using DaggerfallWorkshop.Utility;
+using UnityEditor;
 
 namespace RetroFrame
 {
@@ -24,6 +26,7 @@ namespace RetroFrame
         public static bool ShowErrorLogIndicator { get; set; }
         public static bool IncludeWarnings { get; private set; }
         public static bool IncludeAll { get; private set; }
+        public static int Mode640Replacement { get; private set; }
 
 
         public static bool ShowErrorLog { get; set; }
@@ -127,6 +130,8 @@ namespace RetroFrame
             IncludeWarnings = Mod.GetSettings().GetBool("Options", "IncludeWarnings");
             IncludeAll = Mod.GetSettings().GetBool("Options", "IncludeAll");
 
+            Mode640Replacement = Mod.GetSettings().GetInt("Options", "Mode640x400Replacement");
+            Swap640Mode();
 
             //Handle log entries produced by Unity logger
             Application.logMessageReceived += HandleLog;
@@ -137,6 +142,11 @@ namespace RetroFrame
             //Creating the overlay panel.  Doing it early to make sure it exists before messages come in.
             overlayPanel = new OverlayPanel();
             overlayPanel.Setup();
+
+#if UNITY_EDITOR
+            //RenderTexture assets seem to be holding on to data after running in editor.
+            EditorApplication.playModeStateChanged += PlayModeStateChanged_Handler;
+#endif
 
             Mod.IsReady = true;
         }
@@ -152,6 +162,32 @@ namespace RetroFrame
                     return info;
 
             return null;
+        }
+
+
+        static void Swap640Mode()
+        {
+            RenderTexture rt;
+            RenderTexture rt_hud;
+
+            if (Mode640Replacement == 1)
+            {
+                rt = Mod.GetAsset<RenderTexture>("RetroTarget1280x800");
+                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget1280x800_HUD");
+            }
+            else if (Mode640Replacement == 2)
+            {
+                rt = Mod.GetAsset<RenderTexture>("RetroTarget2560x1600");
+                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget2560x1600_HUD");
+            }
+            else
+            {
+                return;
+            }
+
+            RetroRenderer retroRenderer = GameManager.GetMonoBehaviour<RetroRenderer>(false);
+            retroRenderer.RetroTexture640x400 = rt;
+            retroRenderer.RetroTexture640x400_HUD = rt_hud;
         }
 
 
@@ -449,7 +485,21 @@ namespace RetroFrame
         }
 
 
+#if UNITY_EDITOR
 
+        static void PlayModeStateChanged_Handler (PlayModeStateChange state)
+        {
+            //The render texture assets seem to be storing graphical info, which bloats file size.
+            //I'm not sure what the correct way to handle is, but will discard contents on exiting playmode.
+            if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                RetroRenderer retroRenderer = GameManager.GetMonoBehaviour<RetroRenderer>(false);
+                retroRenderer.RetroTexture640x400.DiscardContents();
+                retroRenderer.RetroTexture640x400_HUD.DiscardContents();
+            }
+        }
+
+#endif
 
     } //class RetroFrame
 

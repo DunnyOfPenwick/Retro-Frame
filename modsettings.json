@@ -56,6 +56,18 @@
                     "Description": "See textdatabase.txt translation",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Options": [
+                        "640x400",
+                        "1280x800",
+                        "2560x1600"
+                    ],
+                    "Value": 0,
+                    "Name": "Mode640x400Replacement",
+                    "Description": "See textdatabase.txt translation",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
                 }
             ],
             "$version": "v1"

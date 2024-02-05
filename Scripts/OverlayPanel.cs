@@ -102,6 +102,15 @@ namespace RetroFrame
         Texture2D weaponTexture;
         Texture2D restTexture;
         Texture2D compassTexture;
+        Texture2D headFrameTexture;
+        Texture2D vitalsFrameTexture;
+        Texture2D hotkeyButtonTexture;
+        Texture2D hotkeyIconCutoutTexture;
+        Texture2D switchTexture;
+        Texture2D priorTexture;
+        Texture2D nextTexture;
+        Texture2D topBorderTexture;
+        Texture2D bottomBorderTexture;
 
         readonly List<LiveEffectBundle> collapsedActiveEffects = new List<LiveEffectBundle>();
         readonly List<LiveEffectBundle> fullDisplayActiveEffects = new List<LiveEffectBundle>();
@@ -117,6 +126,7 @@ namespace RetroFrame
         public bool Started = false; //will be false until first game load or character creation is complete
 
         Mod firstPersonLightingMod;
+        Mod dream;
         bool isMonsterUniversityInstalled;
 
         #endregion
@@ -133,12 +143,15 @@ namespace RetroFrame
         #region Layout/Setup
         public void Setup()
         {
+            dream = ModManager.Instance.GetMod("DREAM - HUD & MENU");
+            firstPersonLightingMod = ModManager.Instance.GetMod("First-Person-Lighting");
+            isMonsterUniversityInstalled = ModManager.Instance.GetMod("Monster-University") != null;
+
+            LoadAssets();
+
             Hotkeys.Setup();
 
             BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Frame");
-
-            firstPersonLightingMod = ModManager.Instance.GetMod("First-Person-Lighting");
-            isMonsterUniversityInstalled = ModManager.Instance.GetMod("Monster-University") != null;
 
 
             // Update active effects for player every round or when a bundle is assigned, removed, or state added
@@ -150,8 +163,6 @@ namespace RetroFrame
             SaveLoadManager.OnStartLoad += SaveLoadManager_OnStartLoad;
             SaveLoadManager.OnLoad += SaveLoadManager_OnLoad;
             PlayerDeath.OnPlayerDeath += OnPlayerDeath;
-
-            LoadAssets();
 
             Tag = "OverlayPanel";
 
@@ -190,7 +201,7 @@ namespace RetroFrame
             characterPanel.Tag = "CharacterPanel";
             characterPanel.VerticalAlignment = VerticalAlignment.Top;
             characterPanel.Size = new Vector2(leftPanel.InteriorWidth, 168);
-            characterPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrame");
+            characterPanel.BackgroundTexture = headFrameTexture;
             characterPanel.ToolTip = defaultToolTip;
             characterPanel.OnMouseClick += CharacterPanel_OnMouseClick;
             characterPanel.OnRightMouseClick += CharacterPanel_OnMouseClick;
@@ -203,9 +214,11 @@ namespace RetroFrame
             headPanel.BackgroundTextureLayout = BackgroundLayout.ScaleToFit;
             //---head shade panel
             headPanel.Components.Add(headShadePanel);
+            headShadePanel.Tag = "HeadShadePanel";
             headShadePanel.Size = headPanel.Size;
             //---head tint panel
             headShadePanel.Components.Add(headTintPanel);
+            headTintPanel.Tag = "HeadTintPanel";
             headTintPanel.Size = headShadePanel.Size;
             //---name
             characterPanel.Components.Add(nameLabel);
@@ -244,7 +257,7 @@ namespace RetroFrame
             vitalsPanel.VerticalAlignment = VerticalAlignment.Bottom;
             vitalsPanel.HorizontalAlignment = HorizontalAlignment.Center;
             vitalsPanel.Size = new Vector2(leftPanel.InteriorWidth, 160);
-            vitalsPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("VitalsFrame");
+            vitalsPanel.BackgroundTexture = vitalsFrameTexture;
             vitalsPanel.ToolTip = defaultToolTip;
             //---vitals value bars
             HUDVitals vitals = new HUDVitals();
@@ -257,13 +270,26 @@ namespace RetroFrame
             vitals.SetAllAutoSize(AutoSizeModes.None);
             vitals.SetAllHorizontalAlignment(HorizontalAlignment.None);
             vitals.SetAllVerticalAlignment(VerticalAlignment.None);
-            Vector2 barSize = new Vector2(18, 112);
-            vitals.CustomHealthBarPosition = new Vector2(30, 24);
-            vitals.CustomHealthBarSize = barSize;
-            vitals.CustomFatigueBarPosition = new Vector2(65, 24);
-            vitals.CustomFatigueBarSize = barSize;
-            vitals.CustomMagickaBarPosition = new Vector2(100, 24);
-            vitals.CustomMagickaBarSize = barSize;
+            if (dream != null)
+            {
+                Vector2 barSize = new Vector2(19, 112);
+                vitals.CustomHealthBarPosition = new Vector2(30, 24);
+                vitals.CustomHealthBarSize = barSize;
+                vitals.CustomFatigueBarPosition = new Vector2(68, 24);
+                vitals.CustomFatigueBarSize = barSize;
+                vitals.CustomMagickaBarPosition = new Vector2(105, 24);
+                vitals.CustomMagickaBarSize = barSize;
+            }
+            else
+            {
+                Vector2 barSize = new Vector2(18, 112);
+                vitals.CustomHealthBarPosition = new Vector2(30, 24);
+                vitals.CustomHealthBarSize = barSize;
+                vitals.CustomFatigueBarPosition = new Vector2(65, 24);
+                vitals.CustomFatigueBarSize = barSize;
+                vitals.CustomMagickaBarPosition = new Vector2(100, 24);
+                vitals.CustomMagickaBarSize = barSize;
+            }
 
             //======Active Effects Panel===============
             leftPanel.Components.Add(activeEffectsPanel);
@@ -326,10 +352,12 @@ namespace RetroFrame
             instantaneousSpellIconContainer.Position = new Vector2(leftPanel.Size.x + 10, mainPanel.Size.y - 110);
             instantaneousSpellIconContainer.Size = new Vector2(50, 50);
             instantaneousSpellIconContainer.Components.Add(instantaneousSpellIcon);
+            instantaneousSpellIcon.Tag = "InstSpellIcon";
             instantaneousSpellIcon.Size = new Vector2(10, 10);
             instantaneousSpellIcon.AutoSize = AutoSizeModes.ResizeToFill;
             instantaneousSpellIcon.BackgroundTextureLayout = BackgroundLayout.StretchToFill;
             instantaneousSpellIconContainer.Components.Add(instantaneousSpellIconOverlay);
+            instantaneousSpellIconOverlay.Tag = "InstSpellIconOverlay";
             instantaneousSpellIconOverlay.Size = new Vector2(50, 50);
             instantaneousSpellIcon.AutoSize = AutoSizeModes.ResizeToFill;
 
@@ -436,7 +464,7 @@ namespace RetroFrame
                 Hotkeys.Buttons[i].Panel = new Panel();
                 hotkeysPanel.Components.Add(Hotkeys.Buttons[i].Panel);
                 Hotkeys.Buttons[i].Panel.Tag = i.ToString();
-                Hotkeys.Buttons[i].Panel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyButton");
+                Hotkeys.Buttons[i].Panel.BackgroundTexture = hotkeyButtonTexture;
                 Hotkeys.Buttons[i].Panel.Size = new Vector2(rightPanel.InteriorWidth, buttonHeight);
                 Hotkeys.Buttons[i].Panel.TopMargin = Hotkeys.Buttons[i].Panel.BottomMargin = 4;
                 Hotkeys.Buttons[i].Panel.Position = new Vector2(0, i * buttonHeight);
@@ -452,7 +480,7 @@ namespace RetroFrame
                 iconContainer.Tag = "IconContainer";
                 iconContainer.Position = new Vector2(20, 0);
                 iconContainer.VerticalAlignment = VerticalAlignment.Middle;
-                iconContainer.Size = new Vector2(52, 50);
+                iconContainer.Size = new Vector2(50, 46);
                 iconContainer.BackgroundColor = iconBackgroundColor;
 
                 Panel icon = new Panel();
@@ -472,7 +500,7 @@ namespace RetroFrame
                 hotkeyIconCutout.VerticalAlignment = VerticalAlignment.Middle;
                 hotkeyIconCutout.HorizontalAlignment = HorizontalAlignment.Left;
                 hotkeyIconCutout.AutoSize = AutoSizeModes.ResizeToFill;
-                hotkeyIconCutout.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyIconCutout");
+                hotkeyIconCutout.BackgroundTexture = hotkeyIconCutoutTexture;
                 hotkeyIconCutout.BackgroundTextureLayout = BackgroundLayout.StretchToFill;
 
                 Hotkeys.Buttons[i].AnimationPanel = new Panel();
@@ -540,7 +568,7 @@ namespace RetroFrame
             togglePanelButton.Size = new Vector2(rightPanel.InteriorWidth / 2, buttonHeight);
             togglePanelButton.Position = new Vector2(0, hotkeysPanel.Size.y);
             togglePanelButton.HorizontalAlignment = HorizontalAlignment.Center;
-            togglePanelButton.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Switch");
+            togglePanelButton.BackgroundTexture = switchTexture;
             togglePanelButton.OnMouseEnter += TogglePanelButton_OnMouseEnter;
             togglePanelButton.OnMouseClick += TogglePanelButton_OnMouseClick;
             togglePanelButton.OnRightMouseClick += TogglePanelButton_OnMouseClick;
@@ -553,7 +581,7 @@ namespace RetroFrame
             priorHotkeyGroupButton.Size = new Vector2(rightPanel.InteriorWidth / 4, buttonHeight);
             priorHotkeyGroupButton.Position = new Vector2(0, hotkeysPanel.Size.y);
             priorHotkeyGroupButton.HorizontalAlignment = HorizontalAlignment.Left;
-            priorHotkeyGroupButton.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Prior");
+            priorHotkeyGroupButton.BackgroundTexture = priorTexture;
             priorHotkeyGroupButton.ToolTip = defaultToolTip;
             priorHotkeyGroupButton.OnMouseClick += ChangeHotkeyGroupButton_OnMouseClick;
             priorHotkeyGroupButton.OnRightMouseClick += ChangeHotkeyGroupButton_OnMouseClick;
@@ -566,7 +594,7 @@ namespace RetroFrame
             nextHotkeyGroupButton.Size = new Vector2(rightPanel.InteriorWidth / 4, buttonHeight);
             nextHotkeyGroupButton.Position = new Vector2(0, hotkeysPanel.Size.y);
             nextHotkeyGroupButton.HorizontalAlignment = HorizontalAlignment.Right;
-            nextHotkeyGroupButton.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Next");
+            nextHotkeyGroupButton.BackgroundTexture = nextTexture;
             nextHotkeyGroupButton.ToolTip = defaultToolTip;
             nextHotkeyGroupButton.OnMouseClick += ChangeHotkeyGroupButton_OnMouseClick;
             nextHotkeyGroupButton.OnRightMouseClick += ChangeHotkeyGroupButton_OnMouseClick;
@@ -617,7 +645,7 @@ namespace RetroFrame
             topBorderPanel.Size = new Vector2(viewPanel.Size.x, 55);
             topBorderPanel.VerticalAlignment = VerticalAlignment.Top;
             topBorderPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            topBorderPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("TopBorder");
+            topBorderPanel.BackgroundTexture = topBorderTexture;
             topBorderPanel.Enabled = RetroFrameMod.ShowBorders;
 
             viewPanel.Components.Add(bottomBorderPanel);
@@ -625,7 +653,7 @@ namespace RetroFrame
             bottomBorderPanel.Size = new Vector2(viewPanel.Size.x, 55);
             bottomBorderPanel.VerticalAlignment = VerticalAlignment.Bottom;
             bottomBorderPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            bottomBorderPanel.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("BottomBorder");
+            bottomBorderPanel.BackgroundTexture = bottomBorderTexture;
             bottomBorderPanel.Enabled = RetroFrameMod.ShowBorders;
         }
 
@@ -678,6 +706,31 @@ namespace RetroFrame
             weaponTexture = ImageReader.GetSubTexture(actionButtonTexture, weaponSubrect, nativeTextureSize);
             restTexture = ImageReader.GetSubTexture(actionButtonTexture, restSubrect, nativeTextureSize);
             compassTexture = ImageReader.GetSubTexture(actionButtonTexture, compassSubrect, nativeTextureSize);
+
+            if (dream != null)
+            {
+                headFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrameHi");
+                vitalsFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("VitalsFrameHi");
+                hotkeyButtonTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyButtonHi");
+                hotkeyIconCutoutTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyIconCutoutHi");
+                switchTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("SwitchHi");
+                priorTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("PriorHi");
+                nextTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("NextHi");
+                topBorderTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("TopBorderHi");
+                bottomBorderTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("BottomBorderHi");
+            }
+            else
+            {
+                headFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrame");
+                vitalsFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("VitalsFrame");
+                hotkeyButtonTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyButton");
+                hotkeyIconCutoutTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HotkeyIconCutout");
+                switchTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Switch");
+                priorTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Prior");
+                nextTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Next");
+                topBorderTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("TopBorder");
+                bottomBorderTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("BottomBorder");
+            }
         }
 
 
@@ -1441,7 +1494,7 @@ namespace RetroFrame
         /// </summary>
         void CharacterPanel_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (!GameManager.IsGamePaused)
+            if (!GameManager.IsGamePaused && GameManager.Instance.PlayerMouseLook.cursorActive)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PostMessage(DaggerfallUIMessages.dfuiOpenCharacterSheetWindow);
@@ -1454,7 +1507,7 @@ namespace RetroFrame
         /// </summary>
         void InventoryButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (!GameManager.IsGamePaused)
+            if (!GameManager.IsGamePaused && GameManager.Instance.PlayerMouseLook.cursorActive)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PostMessage(DaggerfallUIMessages.dfuiOpenInventoryWindow);
@@ -1467,6 +1520,9 @@ namespace RetroFrame
         /// </summary>
         void InteractionModeButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
+            if (GameManager.IsGamePaused || !GameManager.Instance.PlayerMouseLook.cursorActive)
+                return;
+
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
             // Cycle interaction mode forward on left click
@@ -1494,6 +1550,9 @@ namespace RetroFrame
         /// </summary>
         void InteractionModeButton_OnRightMouseClick(BaseScreenComponent sender, Vector2 position)
         {
+            if (GameManager.IsGamePaused || !GameManager.Instance.PlayerMouseLook.cursorActive)
+                return;
+
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
             // Cycle interaction mode backward on right click.
@@ -1530,7 +1589,11 @@ namespace RetroFrame
         /// </summary>
         void SpellsButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallSpellBookWindow)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallSpellBookWindow)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PopWindow();
@@ -1548,7 +1611,7 @@ namespace RetroFrame
         /// </summary>
         void WeaponButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (!GameManager.IsGamePaused)
+            if (!GameManager.IsGamePaused && GameManager.Instance.PlayerMouseLook.cursorActive)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 GameManager.Instance.WeaponManager.ToggleSheath();
@@ -1556,10 +1619,16 @@ namespace RetroFrame
         }
 
 
-        //Opens/Closes the UseMagicItem window.
+        /// <summary>
+        /// Opens/Closes the UseMagicItem window.
+        /// </summary>
         void UseButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallUseMagicItemWindow)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallUseMagicItemWindow)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PopWindow();
@@ -1577,7 +1646,11 @@ namespace RetroFrame
         /// </summary>
         void TransportButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallTransportWindow)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallTransportWindow)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PopWindow();
@@ -1595,7 +1668,11 @@ namespace RetroFrame
         /// </summary>
         void MapButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (!GameManager.IsGamePaused)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (!GameManager.IsGamePaused)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PostMessage(DaggerfallUIMessages.dfuiOpenAutomap);
@@ -1620,7 +1697,11 @@ namespace RetroFrame
         /// </summary>
         void MapButton_OnRightMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallTravelMapWindow)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallTravelMapWindow)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PopWindow();
@@ -1645,7 +1726,11 @@ namespace RetroFrame
         /// </summary>
         void RestButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallRestWindow)
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallRestWindow)
             {
                 DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
                 DaggerfallUI.Instance.UserInterfaceManager.PopWindow();
@@ -1664,6 +1749,11 @@ namespace RetroFrame
         /// </summary>
         void HotkeyButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+
             int index = int.Parse((string)sender.Tag);
 
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
@@ -1678,11 +1768,16 @@ namespace RetroFrame
         /// </summary>
         void HotkeyButton_OnRightMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            int index = int.Parse((string)sender.Tag);
-
-            Hotkeys.Set(index, null);  //delete the hotkey
-
-            DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else
+            {
+                int index = int.Parse((string)sender.Tag);
+                Hotkeys.Set(index, null);  //delete the hotkey
+                DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
+            }
         }
 
 
@@ -1711,9 +1806,16 @@ namespace RetroFrame
         /// </summary>
         void TogglePanelButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
-            ActionsPanelLocked = !ActionsPanelLocked;
-            isOverTogglePanelButton = false;
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                return;
+            }
+            else
+            {
+                DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
+                ActionsPanelLocked = !ActionsPanelLocked;
+                isOverTogglePanelButton = false;
+            }
         }
 
 
@@ -1722,7 +1824,10 @@ namespace RetroFrame
         /// </summary>
         void TogglePanelButton_OnMouseEnter(BaseScreenComponent sender)
         {
-            isOverTogglePanelButton = true;
+            if (GameManager.Instance.PlayerMouseLook.cursorActive)
+            {
+                isOverTogglePanelButton = true;
+            }
         }
 
 
@@ -1731,7 +1836,9 @@ namespace RetroFrame
         /// </summary>
         void ChangeHotkeyGroupButton_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
-            if (sender.Tag.Equals("next"))
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+                return;
+            else if (sender.Tag.Equals("NextButtonPanel"))
                 ++Hotkeys.CurrentGroupIndex;
             else
                 --Hotkeys.CurrentGroupIndex;
@@ -1759,6 +1866,9 @@ namespace RetroFrame
 
         void ErrorLogIcon_OnMouseClick(BaseScreenComponent sender, Vector2 position)
         {
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+                return;
+
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
             RetroFrameMod.LockErrorLog = !RetroFrameMod.LockErrorLog;
@@ -1766,6 +1876,9 @@ namespace RetroFrame
 
         void ErrorLogIcon_OnRightMouseClick(BaseScreenComponent sender, Vector2 position)
         {
+            if (!GameManager.Instance.PlayerMouseLook.cursorActive)
+                return;
+
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
             RetroFrameMod.ShowErrorLogIndicator = false;
@@ -1774,7 +1887,8 @@ namespace RetroFrame
 
         void ErrorLogIcon_OnMouseEnter(BaseScreenComponent sender)
         {
-            RetroFrameMod.ShowErrorLog = true;
+            if (GameManager.Instance.PlayerMouseLook.cursorActive)
+                RetroFrameMod.ShowErrorLog = true;
         }
 
         void ErrorLogIcon_OnMouseLeave(BaseScreenComponent sender)
