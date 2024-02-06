@@ -126,7 +126,8 @@ namespace RetroFrame
         public bool Started = false; //will be false until first game load or character creation is complete
 
         Mod firstPersonLightingMod;
-        Mod dream;
+        Mod dreamHUD;
+        Mod dreamPortraits;
         bool isMonsterUniversityInstalled;
 
         #endregion
@@ -143,7 +144,8 @@ namespace RetroFrame
         #region Layout/Setup
         public void Setup()
         {
-            dream = ModManager.Instance.GetMod("DREAM - HUD & MENU");
+            dreamHUD = ModManager.Instance.GetMod("DREAM - HUD & MENU");
+            dreamPortraits = ModManager.Instance.GetMod("DREAM - PORTRAITS");
             firstPersonLightingMod = ModManager.Instance.GetMod("First-Person-Lighting");
             isMonsterUniversityInstalled = ModManager.Instance.GetMod("Monster-University") != null;
 
@@ -270,7 +272,7 @@ namespace RetroFrame
             vitals.SetAllAutoSize(AutoSizeModes.None);
             vitals.SetAllHorizontalAlignment(HorizontalAlignment.None);
             vitals.SetAllVerticalAlignment(VerticalAlignment.None);
-            if (dream != null)
+            if (dreamHUD != null)
             {
                 Vector2 barSize = new Vector2(19, 112);
                 vitals.CustomHealthBarPosition = new Vector2(30, 24);
@@ -698,6 +700,17 @@ namespace RetroFrame
             Rect restSubrect = new Rect(225, 23, 48, 23);
             Rect compassSubrect = new Rect(273, 0, 47, 46);
 
+            if (dreamHUD != null)
+            {
+                //Additional small adjustments for DREAM buttons.
+                spellSubrect = new Rect(84, 0, 47, 23);
+                useMagicItemSubrect = new Rect(84, 23, 47, 22);
+                transportSubrect = new Rect(131, 23, 47, 22);
+                weaponSubrect = new Rect(225, 1, 47, 22);
+                mapSubrect = new Rect(178, 23, 47, 22);
+                restSubrect = new Rect(225, 23, 47, 23);
+            }
+
             spellTexture = ImageReader.GetSubTexture(actionButtonTexture, spellSubrect, nativeTextureSize);
             useMagicItemTexture = ImageReader.GetSubTexture(actionButtonTexture, useMagicItemSubrect, nativeTextureSize);
             transportTexture = ImageReader.GetSubTexture(actionButtonTexture, transportSubrect, nativeTextureSize);
@@ -707,7 +720,7 @@ namespace RetroFrame
             restTexture = ImageReader.GetSubTexture(actionButtonTexture, restSubrect, nativeTextureSize);
             compassTexture = ImageReader.GetSubTexture(actionButtonTexture, compassSubrect, nativeTextureSize);
 
-            if (dream != null)
+            if (dreamHUD != null)
             {
                 headFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrameHi");
                 vitalsFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("VitalsFrameHi");
@@ -936,9 +949,16 @@ namespace RetroFrame
             if (triggerHeadChange || hud.HeadTexture == null)
             {
                 //Steal the head texture from the LargeHUD character panel.
-                hud.Enabled = true;
-                hud.Update();
-                hud.Enabled = false;
+                if (!hud.Enabled)
+                {
+                    hud.Enabled = true;
+                    hud.Update();
+                    hud.Enabled = false;
+                }
+                else
+                {
+                    hud.Update();
+                }
 
                 if (hud.HeadTexture == null)
                     return;
@@ -950,7 +970,7 @@ namespace RetroFrame
                 chameleonHeadTexture = AlterPixels(hud.HeadTexture, 40, false);
             }
 
-            headPanel.Enabled = true; //but gets disabled for invisibility
+            headPanel.Enabled = true; //...but gets disabled for invisibility
 
             PlayerEntity player = GameManager.Instance.PlayerEntity;
 
@@ -970,8 +990,20 @@ namespace RetroFrame
         /// Used to lower pixel alpha values of a texture, and possibly darken as well.
         /// Useful if a character is using magical concealment.
         /// </summary>
-        Texture2D AlterPixels(Texture2D tex, byte alpha, bool blacken)
+        Texture2D AlterPixels(Texture2D texture, byte alpha, bool blacken)
         {
+            Texture2D tex = texture;
+
+            if (dreamPortraits != null)
+            {
+                //Can't work with dream head textures, possibly because of texture compression.
+                //Getting the default non-dream texture instead.
+                ImageData imageData = GetHeadImageData();
+                imageData.texture = null;
+                Color32[] colors = ImageReader.GetColors(imageData);
+                tex = ImageReader.GetTexture(colors, imageData.width, imageData.height);
+            }
+
             Color32[] pixels = tex.GetPixels32();
 
             for (var i = 0; i < pixels.Length; ++i)
@@ -992,6 +1024,33 @@ namespace RetroFrame
             return newTexture;
         }
 
+
+        ImageData GetHeadImageData()
+        {
+            ImageData head;
+
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+
+            // Check for racial override head
+            RacialOverrideEffect racialOverride = GameManager.Instance.PlayerEffectManager.GetRacialOverrideEffect();
+            if (racialOverride != null && racialOverride.GetCustomHeadImageData(playerEntity, out head))
+            {
+                return head;
+            }
+
+            // Otherwise just get standard head based on gender and race
+            switch (playerEntity.Gender)
+            {
+                default:
+                case Genders.Male:
+                    head = ImageReader.GetImageData(playerEntity.RaceTemplate.PaperDollHeadsMale, playerEntity.FaceIndex, 0, true);
+                    break;
+                case Genders.Female:
+                    head = ImageReader.GetImageData(playerEntity.RaceTemplate.PaperDollHeadsFemale, playerEntity.FaceIndex, 0, true);
+                    break;
+            }
+            return head;
+        }
 
 
         /// <summary>

@@ -1,8 +1,8 @@
 {
     "ModTitle": "Retro-Frame",
-    "ModVersion": "1.0.6",
+    "ModVersion": "1.0.7",
     "ModAuthor": "DunnyOfPenwick",
-    "ContactInfo": "http://dfworkshop.net - or - DunnyOfPenwick@proton.me",
+    "ContactInfo": "http://dfworkshop.net",
     "DFUnity_Version": "1.0.0",
     "ModDescription": "Adds a Frame-HUD with hotkeys when in retro 4:3 aspect mode.",
     "GUID": "3be30a41-be01-4577-89be-5bfb0ba94088",
