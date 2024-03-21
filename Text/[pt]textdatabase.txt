@@ -13,12 +13,8 @@ Settings.Options.ShowBorders.Name, "MostrarBordas"
 Settings.Options.ShowBorders.Description, "Mostra as bordas superior e inferior da área de visualização."
 Settings.Options.ShowShortcutKeyInTooltip.Name, "MostrarTecla deAtalho naDica deFerramenta"
 Settings.Options.ShowShortcutKeyInTooltip.Description, "Mostrar teclas de atalho do teclado nas dicas\rdo mouse para botões Daggerfall HUD."
-Settings.Options.ShowErrorLogIndicator.Name, "MostrarIndicador deRegistro deErros"
-Settings.Options.ShowErrorLogIndicator.Description, "Mostre brevemente um indicador de registro de erros\rno canto inferior direito quando ocorrerem erros do sistema."
-Settings.Options.IncludeWarnings.Name, "IncluirAvisos"
-Settings.Options.IncludeWarnings.Description, "Inclui mensagens de aviso quando a caixa\r'Mostrar log de erros' está habilitada."
-Settings.Options.IncludeAll.Name, "IncluirTudo"
-Settings.Options.IncludeAll.Description, "Incluir todas as mensagens quando a caixa\r'Mostrar log de erros' estiver habilitada."
+Settings.Options.ShowLogMessages.Name, "MostrarIndicador deRegistro deErros"
+Settings.Options.ShowLogMessages.Description, "Mostre brevemente um indicador de registro de erros\rno canto inferior direito quando ocorrerem erros do sistema."
 Settings.Options.Mode640x400Replacement.Name = "Substituição doModo 640x400";
 Settings.Options.Mode640x400Replacement.Description, "Substitua o modo 640x400 por um modo de resolução mais alta."
 
@@ -27,7 +23,7 @@ Settings.Options.Mode640x400Replacement.Description, "Substitua o modo 640x400 p
 LogFileLocation, "Localização do Arquivo de Log"
 LogHeader, "=======Entrada de Registro Mais Recente======"
 StackTraceHeader, "-------Rastreamento de Pilha-------"
-Previous5, "=======10 Anteriores======="
+Previous10, "=======10 Anteriores======="
 CrosshairToggle, "Alternar Retícula"
 ErrorIconTooltip, "Clique Esquerdo: bloquear/desbloquear janela de registro\rClique Direito: parar de mostrar erros";
 

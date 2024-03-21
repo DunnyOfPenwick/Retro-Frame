@@ -21,7 +21,7 @@ namespace RetroFrame
             LogFileLocation,
             LogHeader,
             StackTraceHeader,
-            Previous5,
+            Previous10,
             CrosshairToggle,
 
             //Overlay

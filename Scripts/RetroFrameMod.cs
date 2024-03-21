@@ -10,7 +10,7 @@ using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop;
 using Wenzil.Console;
 using DaggerfallWorkshop.Utility;
-using UnityEditor;
+
 
 namespace RetroFrame
 {
@@ -23,9 +23,7 @@ namespace RetroFrame
         public static bool SilentGroupSwitching { get; private set; }
         public static bool ShowBorders { get; private set; }
         public static bool ShowShortcutKeyInTooltip { get; private set; }
-        public static bool ShowErrorLogIndicator { get; set; }
-        public static bool IncludeWarnings { get; private set; }
-        public static bool IncludeAll { get; private set; }
+        public static int ShowLogMessages { get; set; }
         public static int Mode640Replacement { get; private set; }
 
 
@@ -126,9 +124,7 @@ namespace RetroFrame
             SilentGroupSwitching = Mod.GetSettings().GetBool("Options", "SilentGroupSwitching");
             ShowBorders = Mod.GetSettings().GetBool("Options", "ShowBorders");
             ShowShortcutKeyInTooltip = Mod.GetSettings().GetBool("Options", "ShowShortcutKeyInTooltip");
-            ShowErrorLogIndicator = Mod.GetSettings().GetBool("Options", "ShowErrorLogIndicator");
-            IncludeWarnings = Mod.GetSettings().GetBool("Options", "IncludeWarnings");
-            IncludeAll = Mod.GetSettings().GetBool("Options", "IncludeAll");
+            ShowLogMessages = Mod.GetSettings().GetInt("Options", "ShowLogMessages");
 
             Mode640Replacement = Mod.GetSettings().GetInt("Options", "Mode640x400Replacement");
             Swap640Mode();
@@ -142,11 +138,6 @@ namespace RetroFrame
             //Creating the overlay panel.  Doing it early to make sure it exists before messages come in.
             overlayPanel = new OverlayPanel();
             overlayPanel.Setup();
-
-#if UNITY_EDITOR
-            //RenderTexture assets seem to be holding on to data after running in editor.
-            EditorApplication.playModeStateChanged += PlayModeStateChanged_Handler;
-#endif
 
             Mod.IsReady = true;
         }
@@ -167,27 +158,30 @@ namespace RetroFrame
 
         static void Swap640Mode()
         {
-            RenderTexture rt;
-            RenderTexture rt_hud;
+            RenderTexture presentationTarget = Mod.GetAsset<RenderTexture>("RetroPresentation");
+            RenderTexture rt = null;
+            RenderTexture rt_hud = null;
 
             if (Mode640Replacement == 1)
             {
-                rt = Mod.GetAsset<RenderTexture>("RetroTarget1280x800");
-                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget1280x800_HUD");
+                rt = Mod.GetAsset<RenderTexture>("RetroTarget720x540");
+                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget720x540_HUD");
             }
             else if (Mode640Replacement == 2)
             {
-                rt = Mod.GetAsset<RenderTexture>("RetroTarget2560x1600");
-                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget2560x1600_HUD");
-            }
-            else
-            {
-                return;
+                rt = Mod.GetAsset<RenderTexture>("RetroTarget1440x1080");
+                rt_hud = Mod.GetAsset<RenderTexture>("RetroTarget1440x1080_HUD");
             }
 
             RetroRenderer retroRenderer = GameManager.GetMonoBehaviour<RetroRenderer>(false);
-            retroRenderer.RetroTexture640x400 = rt;
-            retroRenderer.RetroTexture640x400_HUD = rt_hud;
+            if (retroRenderer && presentationTarget != null && rt != null && rt_hud != null)
+            {
+                retroRenderer.RetroTexture640x400 = rt;
+                retroRenderer.RetroTexture640x400_HUD = rt_hud;
+                retroRenderer.RetroPresentationTarget = presentationTarget;
+                GameManager.Instance.RetroPresenter.RetroPresentationSource = retroRenderer.RetroPresentationTarget;
+            }
+
         }
 
 
@@ -265,22 +259,23 @@ namespace RetroFrame
         /// </summary>
         static void HandleLog(string logString, string stackTrace, LogType type)
         {
-            if (ShowErrorLogIndicator)
+            if (ShowLogMessages == 0)
+                return;
+
+            //ShowLogMessages: 0=None, 1=Errors, 2=Warnings, 3=All
+            if (type == LogType.Error ||
+                type == LogType.Exception ||
+                (type == LogType.Warning && ShowLogMessages == 2) ||
+                ShowLogMessages == 3)
             {
-                if (type == LogType.Error ||
-                    type == LogType.Exception ||
-                    (type == LogType.Warning && IncludeWarnings) ||
-                    IncludeAll)
-                {
-                    LogCount++;
-                    LastLogTime = Time.realtimeSinceStartup;
-                    logString = logString ?? "(??)";
+                LogCount++;
+                LastLogTime = Time.realtimeSinceStartup;
+                logString = logString ?? "(??)";
 
-                    AddLogEntry(type, logString);
+                AddLogEntry(type, logString);
 
-                    if (!LockErrorLog)
-                        UpdateLogWindowText(stackTrace ?? "(??)");
-                }
+                if (!LockErrorLog)
+                    UpdateLogWindowText(stackTrace ?? "(??)");
             }
         }
 
@@ -342,7 +337,7 @@ namespace RetroFrame
                     text += $"{Text.StackTraceHeader}\n";
                     text += stackTrace;
 
-                    text += $"\n\n{Text.Previous5}\n";
+                    text += $"\n\n{Text.Previous10}\n";
                 }
                 else
                 {
@@ -485,21 +480,6 @@ namespace RetroFrame
         }
 
 
-#if UNITY_EDITOR
-
-        static void PlayModeStateChanged_Handler (PlayModeStateChange state)
-        {
-            //The render texture assets seem to be storing graphical info, which bloats file size.
-            //I'm not sure what the correct way to handle is, but will discard contents on exiting playmode.
-            if (state == PlayModeStateChange.ExitingPlayMode)
-            {
-                RetroRenderer retroRenderer = GameManager.GetMonoBehaviour<RetroRenderer>(false);
-                retroRenderer.RetroTexture640x400.DiscardContents();
-                retroRenderer.RetroTexture640x400_HUD.DiscardContents();
-            }
-        }
-
-#endif
 
     } //class RetroFrame
 

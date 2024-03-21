@@ -1,8 +1,8 @@
 {
     "ModTitle": "Retro-Frame",
-    "ModVersion": "1.0.7",
+    "ModVersion": "1.1.0",
     "ModAuthor": "DunnyOfPenwick",
-    "ContactInfo": "http://dfworkshop.net",
+    "ContactInfo": "dfworkshop.net or @proton.me",
     "DFUnity_Version": "1.0.0",
     "ModDescription": "Adds a Frame-HUD with hotkeys when in retro 4:3 aspect mode.",
     "GUID": "3be30a41-be01-4577-89be-5bfb0ba94088",
@@ -43,9 +43,11 @@
         "Assets/Game/Mods/Retro-Frame/Textures/HotkeyIconCutoutHi.png",
         "Assets/Game/Mods/Retro-Frame/Textures/BottomBorderHi.png",
         "Assets/Game/Mods/Retro-Frame/Textures/TopBorderHi.png",
-        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget1280x800.renderTexture",
-        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget1280x800_HUD.renderTexture",
-        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget2560x1600.renderTexture",
-        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget2560x1600_HUD.renderTexture"
+        "Assets/Game/Mods/Retro-Frame/Textures/FrameHi.png",
+        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget720x540.renderTexture",
+        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget720x540_HUD.renderTexture",
+        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget1440x1080.renderTexture",
+        "Assets/Game/Mods/Retro-Frame/Textures/RetroTarget1440x1080_HUD.renderTexture",
+        "Assets/Game/Mods/Retro-Frame/Textures/RetroPresentation.renderTexture"
     ]
 }

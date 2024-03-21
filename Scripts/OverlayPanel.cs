@@ -126,8 +126,8 @@ namespace RetroFrame
         public bool Started = false; //will be false until first game load or character creation is complete
 
         Mod firstPersonLightingMod;
-        Mod dreamHUD;
-        Mod dreamPortraits;
+        bool usingDreamHUD;
+        bool usingDreamPortraits;
         bool isMonsterUniversityInstalled;
 
         #endregion
@@ -135,17 +135,20 @@ namespace RetroFrame
 
         public OverlayPanel() : base()
         {
-            //Instance = this;
-            Enabled = false; //The overlay will be disabled until game finishes starting/loading.
             instance = this;
+            Enabled = false; //The overlay will be disabled until game finishes starting/loading.
         }
 
 
         #region Layout/Setup
         public void Setup()
         {
-            dreamHUD = ModManager.Instance.GetMod("DREAM - HUD & MENU");
-            dreamPortraits = ModManager.Instance.GetMod("DREAM - PORTRAITS");
+            usingDreamHUD = ModManager.Instance.GetMod("DREAM - HUD & MENU") != null;
+            usingDreamHUD |= ModManager.Instance.GetMod("DREAM 90s - HUD & MENU") != null;
+
+            usingDreamPortraits = ModManager.Instance.GetMod("DREAM - PORTRAITS") != null;
+            usingDreamPortraits |= ModManager.Instance.GetMod("DREAM 90s - PORTRAITS") != null;
+
             firstPersonLightingMod = ModManager.Instance.GetMod("First-Person-Lighting");
             isMonsterUniversityInstalled = ModManager.Instance.GetMod("Monster-University") != null;
 
@@ -153,7 +156,10 @@ namespace RetroFrame
 
             Hotkeys.Setup();
 
-            BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Frame");
+            if (usingDreamHUD)
+                BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("FrameHi");
+            else
+                BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("Frame");
 
 
             // Update active effects for player every round or when a bundle is assigned, removed, or state added
@@ -212,7 +218,7 @@ namespace RetroFrame
             characterPanel.Tag = "HeadPanel";
             headPanel.HorizontalAlignment = HorizontalAlignment.Center;
             headPanel.Position = new Vector2(16, 18);
-            headPanel.Size = new Vector2(leftPanel.Size.x - 30, leftPanel.Size.x - 32);
+            headPanel.Size = new Vector2(leftPanel.Size.x - 30, leftPanel.Size.x - 33);
             headPanel.BackgroundTextureLayout = BackgroundLayout.ScaleToFit;
             //---head shade panel
             headPanel.Components.Add(headShadePanel);
@@ -272,7 +278,7 @@ namespace RetroFrame
             vitals.SetAllAutoSize(AutoSizeModes.None);
             vitals.SetAllHorizontalAlignment(HorizontalAlignment.None);
             vitals.SetAllVerticalAlignment(VerticalAlignment.None);
-            if (dreamHUD != null)
+            if (usingDreamHUD)
             {
                 Vector2 barSize = new Vector2(19, 112);
                 vitals.CustomHealthBarPosition = new Vector2(30, 24);
@@ -700,7 +706,7 @@ namespace RetroFrame
             Rect restSubrect = new Rect(225, 23, 48, 23);
             Rect compassSubrect = new Rect(273, 0, 47, 46);
 
-            if (dreamHUD != null)
+            if (usingDreamHUD)
             {
                 //Additional small adjustments for DREAM buttons.
                 spellSubrect = new Rect(84, 0, 47, 23);
@@ -720,7 +726,7 @@ namespace RetroFrame
             restTexture = ImageReader.GetSubTexture(actionButtonTexture, restSubrect, nativeTextureSize);
             compassTexture = ImageReader.GetSubTexture(actionButtonTexture, compassSubrect, nativeTextureSize);
 
-            if (dreamHUD != null)
+            if (usingDreamHUD)
             {
                 headFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("HeadFrameHi");
                 vitalsFrameTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("VitalsFrameHi");
@@ -826,12 +832,11 @@ namespace RetroFrame
             //Enable the error icon if an error has been logged in the last 10 seconds.
             errorLogIcon.Enabled = RetroFrameMod.LastLogTime > Time.realtimeSinceStartup - 10;
 
-            //Disable if mod setting ShowErrorLogIndicator is false.
-            errorLogIcon.Enabled &= RetroFrameMod.ShowErrorLogIndicator;
-
             //Keep it enabled while the error log window is shown.
             errorLogIcon.Enabled |= RetroFrameMod.ShowErrorLog || RetroFrameMod.LockErrorLog;
 
+            //Disable if mod setting ShowLogMessages is 0(None).
+            errorLogIcon.Enabled &= RetroFrameMod.ShowLogMessages != 0;
 
             errorLogCountLabel.Text = RetroFrameMod.LogCount.ToString();
 
@@ -994,7 +999,7 @@ namespace RetroFrame
         {
             Texture2D tex = texture;
 
-            if (dreamPortraits != null)
+            if (usingDreamPortraits)
             {
                 //Can't work with dream head textures, possibly because of texture compression.
                 //Getting the default non-dream texture instead.
@@ -1940,7 +1945,8 @@ namespace RetroFrame
 
             DaggerfallUI.Instance.PlayOneShot(SoundClips.ButtonClick);
 
-            RetroFrameMod.ShowErrorLogIndicator = false;
+            //Disable logging
+            RetroFrameMod.ShowLogMessages = 0;
         }
 
 

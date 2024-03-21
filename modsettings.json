@@ -37,31 +37,23 @@
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
-                    "Value": true,
-                    "Name": "ShowErrorLogIndicator",
+                    "Options": [
+                        "None",
+                        "Errors",
+                        "Errors+Warnings",
+                        "All"
+                    ],
+                    "Value": 1,
+                    "Name": "ShowLogMessages",
                     "Description": "See textdatabase.txt translation",
                     "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-                {
-                    "Value": false,
-                    "Name": "IncludeWarnings",
-                    "Description": "See textdatabase.txt translation",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-                {
-                    "Value": false,
-                    "Name": "IncludeAll",
-                    "Description": "See textdatabase.txt translation",
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.MultipleChoiceKey"
                 },
                 {
                     "Options": [
                         "640x400",
-                        "1280x800",
-                        "2560x1600"
+                        "720x540",
+                        "1440x1080"
                     ],
                     "Value": 0,
                     "Name": "Mode640x400Replacement",

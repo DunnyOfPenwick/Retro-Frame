@@ -13,12 +13,8 @@ Settings.Options.ShowBorders.Name, "ShowBorders"
 Settings.Options.ShowBorders.Description, "Show top and bottom borders in view area."
 Settings.Options.ShowShortcutKeyInTooltip.Name, "ShowShortcutKeyInTooltip"
 Settings.Options.ShowShortcutKeyInTooltip.Description, "Show keyboard shortcut keys in mouse tooltips\rfor Daggerfall HUD buttons."
-Settings.Options.ShowErrorLogIndicator.Name, "ShowErrorLogIndicator"
-Settings.Options.ShowErrorLogIndicator.Description, "Briefly show an error log indicator in the lower right\rcorner when system errors occur."
-Settings.Options.IncludeWarnings.Name, "IncludeWarnings"
-Settings.Options.IncludeWarnings.Description, "Include warning messages when\rthe 'Show Error Log' box is enabled."
-Settings.Options.IncludeAll.Name, "IncludeAll"
-Settings.Options.IncludeAll.Description, "Include all messages when\rthe 'Show Error Log' box is enabled."
+Settings.Options.ShowLogMessages.Name, "ShowLogMessages"
+Settings.Options.ShowLogMessages.Description, "Briefly show a log indicator in the lower right\rcorner when system errors occur."
 Settings.Options.Mode640x400Replacement.Name = "Mode640x400Replacement";
 Settings.Options.Mode640x400Replacement.Description, "Replace 640x400 mode with a higher resolution mode."
 
@@ -27,7 +23,7 @@ Settings.Options.Mode640x400Replacement.Description, "Replace 640x400 mode with 
 LogFileLocation, "Log File Location"
 LogHeader, "=======Most Recent Log Entry======="
 StackTraceHeader, "-------Stack Trace-------"
-Previous5, "=======Previous 10======="
+Previous10, "=======Previous 10======="
 CrosshairToggle, "Reticle Toggle"
 ErrorIconTooltip, "Left-Click: Lock/Unlock Log Window\rRight-Click: Stop Showing Errors";
 
