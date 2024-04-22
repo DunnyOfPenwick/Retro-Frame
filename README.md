@@ -29,6 +29,8 @@ void MyHandler(string description, object index)
 
 
 ## Getting The Overlay Panel Content
+See the 'DunnyOfPenwick/Retro-Frame-Custom' repository for a pre-built mod you can use for customization.
+
 Use the "getOverlay" message.  It will return the overlay Panel which you can then modify.
 The overlay Panel contains numerous nested child panels, the structure is shown below the example code.
 Each panel and label has a Tag containing a string identifying it.
