@@ -86,9 +86,9 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
                 - HUDVitalsBars
             - ActiveEffectsPanel
                 - ActiveEffectsRowPanel_ (where _ is 0 through 5)
-                    - DescriptionLabel_ (the tag contains the row number, but that was unneccessary)
+                    - DescriptionLabel
                     - Icon_ (where _ is 0 to 2, so 3 icons per row)
-                        - (untagged IconCutout) (default BackgroundTexture 'IconCutout')
+                        - IconCutout (default BackgroundTexture 'IconCutout')
             - LeftPanelPauseGameOverlay (Darkens left panel when game paused)
         - InstSpellIconContainer (this is the icon for any instantaneous spell that is briefly shown at the bottom of the screen)
             - InstSpellIcon
