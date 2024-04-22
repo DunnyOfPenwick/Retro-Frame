@@ -71,7 +71,7 @@ BaseScreenComponent FindChild(Panel parent, string childTag)
 
 ```
 
-### Structure of Overlay Panel Content (current as of v1.0.3)
+### Structure of Overlay Panel Content (current as of v1.1.1)
 - OverlayPanel (default BackgroundTexture is 'Frame')
     - MainPanel
         - LeftPanel
