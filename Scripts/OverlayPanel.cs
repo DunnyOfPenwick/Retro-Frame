@@ -215,7 +215,7 @@ namespace RetroFrame
             characterPanel.OnRightMouseClick += CharacterPanel_OnMouseClick;
             //---head
             characterPanel.Components.Add(headPanel);
-            characterPanel.Tag = "HeadPanel";
+            headPanel.Tag = "HeadPanel";
             headPanel.HorizontalAlignment = HorizontalAlignment.Center;
             headPanel.Position = new Vector2(16, 18);
             headPanel.Size = new Vector2(leftPanel.Size.x - 30, leftPanel.Size.x - 33);
@@ -321,7 +321,7 @@ namespace RetroFrame
 
                 TextLabel label = new TextLabel();
                 rowPanel.Components.Add(label);
-                label.Tag = "DescriptionLabel" + row;
+                label.Tag = "DescriptionLabel";
                 effectLabels[row] = label;
                 label.VerticalAlignment = VerticalAlignment.Middle;
                 label.HorizontalAlignment = HorizontalAlignment.Left;
@@ -346,6 +346,7 @@ namespace RetroFrame
                     icon.ToolTip = defaultToolTip;
                     Panel iconCutout = new Panel(); //--a cutout panel placed over icon to make the icon look circular
                     icon.Components.Add(iconCutout);
+                    iconCutout.Tag = "IconCutout";
                     iconCutout.AutoSize = AutoSizeModes.ResizeToFill;
                     iconCutout.BackgroundTexture = RetroFrameMod.Mod.GetAsset<Texture2D>("IconCutout");
                     iconCutout.BackgroundTextureLayout = BackgroundLayout.StretchToFill;
